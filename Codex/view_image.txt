@@ -1,0 +1,19 @@
+{
+  "type": "function",
+  "name": "view_image",
+  "description": "Attach a local image (by filesystem path) to the conversation context for this turn.",
+  "strict": false,
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "path": {
+        "type": "string",
+        "description": "Local filesystem path to an image file"
+      }
+    },
+    "required": [
+      "path"
+    ],
+    "additionalProperties": false
+  }
+}
