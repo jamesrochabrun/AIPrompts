@@ -1,0 +1,183 @@
+# Git Status Information
+
+## Overview
+Git repository status information provided at the start of conversations.
+
+## gitStatus Section
+
+The gitStatus section provides a snapshot of the repository state at conversation start.
+
+**IMPORTANT**: This status is a snapshot in time and will not update during the conversation.
+
+## Information Provided
+
+### Current Branch
+The branch you're currently on:
+```
+Current branch: main
+```
+
+### Main Branch
+The default/main branch for PR creation:
+```
+Main branch (you will usually use this for PRs): main
+```
+
+Could also be `master`, `develop`, or another branch depending on repository configuration.
+
+### Status
+Current git status showing:
+- Staged changes
+- Unstaged changes
+- Untracked files
+- Or "(clean)" if no changes
+
+```
+Status:
+(clean)
+```
+
+Or with changes:
+```
+Status:
+Modified:
+  src/auth.ts
+  src/login.ts
+Untracked:
+  src/new-feature.ts
+```
+
+### Recent Commits
+Recent commit history with hash and message:
+```
+Recent commits:
+632905d prompts
+56bd0fe Fix git add path for PR creation
+f33fd87 Remove --overwrite flag
+```
+
+## Example gitStatus Block
+
+```
+gitStatus: This is the git status at the start of the conversation.
+Current branch: main
+
+Main branch (you will usually use this for PRs): main
+
+Status:
+(clean)
+
+Recent commits:
+632905d prompts
+56bd0fe Fix git add path for PR creation
+f33fd87 Remove --overwrite flag from create-dmg
+```
+
+## Important Notes
+
+### Snapshot Only
+- Status shown at conversation START
+- Does NOT update during conversation
+- May become stale as you make changes
+- Use `git status` command for current status
+
+### Using the Information
+
+#### Branch Context
+Know what branch you're working on:
+```
+Current branch: feature/authentication
+
+# Important for PR creation
+# Important for commit context
+```
+
+#### Main Branch for PRs
+Use provided main branch for pull requests:
+```
+Main branch (you will usually use this for PRs): main
+
+# When creating PR, target this branch
+```
+
+#### Clean vs Dirty State
+Understand starting state:
+```
+Status: (clean)
+# Safe to start new work
+
+Status: Modified: src/auth.ts
+# Has uncommitted changes
+```
+
+#### Recent Commits Context
+Understand repository history and commit message style:
+```
+Recent commits:
+a1b2c3d Add user authentication
+d4e5f6g Fix login bug
+g7h8i9j Update dependencies
+
+# Follow similar commit message style
+```
+
+## Refreshing Status
+
+### During Conversation
+To get current status during conversation:
+```bash
+git status
+```
+
+This will show real-time status, not the snapshot.
+
+### For Commit Messages
+When creating commits, check recent commits:
+```bash
+git log --oneline -10
+```
+
+This gives you current log, not the snapshot.
+
+## Use Cases
+
+### Starting New Work
+```
+gitStatus shows: (clean)
+Current branch: main
+
+# Good starting point for new feature
+# Create feature branch first
+```
+
+### Uncommitted Changes
+```
+gitStatus shows:
+Modified: src/auth.ts
+
+# Need to handle these changes
+# Commit or stash before switching branches
+```
+
+### PR Target Branch
+```
+Main branch (you will usually use this for PRs): main
+
+# When creating PR:
+gh pr create --base main ...
+```
+
+### Commit Message Style
+```
+Recent commits:
+feat: Add user authentication
+fix: Resolve login timeout issue
+refactor: Simplify auth logic
+
+# Follow conventional commits style
+```
+
+## Related
+- git_commit.txt
+- git_pr.txt
+- environment_info.txt

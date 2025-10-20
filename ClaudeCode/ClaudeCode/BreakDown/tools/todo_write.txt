@@ -1,0 +1,185 @@
+# TodoWrite Tool
+
+## Overview
+Create and manage a structured task list for your current coding session.
+
+## Purpose
+- Track progress and organize complex tasks
+- Demonstrate thoroughness to the user
+- Help user understand progress of requests
+
+## Parameters
+
+### Required
+- **todos**: Array of todo objects
+
+### Todo Object Structure
+Each todo must have:
+- **content**: Imperative form (e.g., "Run tests", "Build project")
+- **status**: "pending" | "in_progress" | "completed"
+- **activeForm**: Present continuous form (e.g., "Running tests", "Building project")
+
+## When to Use This Tool
+
+### Use Proactively For:
+1. **Complex multi-step tasks** - 3+ distinct steps or actions
+2. **Non-trivial and complex tasks** - Careful planning or multiple operations
+3. **User explicitly requests todo list** - Direct user request
+4. **User provides multiple tasks** - Numbered or comma-separated list
+5. **After receiving new instructions** - Capture user requirements immediately
+6. **When starting work** - Mark as in_progress BEFORE beginning
+7. **After completing task** - Mark completed and add new follow-up tasks
+
+### Skip Using For:
+1. Single, straightforward task
+2. Trivial task with no organizational benefit
+3. Task completed in less than 3 trivial steps
+4. Purely conversational or informational task
+
+## Critical Rules
+
+### IMPORTANT
+These tools are EXTREMELY helpful for planning tasks and breaking down larger complex tasks. If you do not use this tool when planning, you may forget to do important tasks - and that is unacceptable.
+
+### Real-Time Updates
+- Update task status in real-time as you work
+- Mark tasks complete IMMEDIATELY after finishing (don't batch completions)
+- Exactly ONE task must be in_progress at any time (not less, not more)
+- Complete current tasks before starting new ones
+- Remove tasks no longer relevant from the list entirely
+
+### Task Completion Requirements
+ONLY mark a task as completed when you have FULLY accomplished it.
+
+Never mark completed if:
+- Tests are failing
+- Implementation is partial
+- You encountered unresolved errors
+- You couldn't find necessary files or dependencies
+
+If blocked:
+- Keep task as in_progress
+- Create new task describing what needs to be resolved
+
+## Task Forms
+
+### Content (Imperative)
+What needs to be done:
+- "Run tests"
+- "Fix authentication bug"
+- "Build the project"
+- "Create user model"
+
+### ActiveForm (Present Continuous)
+Shown during execution:
+- "Running tests"
+- "Fixing authentication bug"
+- "Building the project"
+- "Creating user model"
+
+## Examples
+
+### Example 1: Multi-Step Feature
+```
+User: Run the build and fix any type errors
+
+TodoWrite tool:
+  todos: [
+    {
+      content: "Run the build",
+      status: "in_progress",
+      activeForm: "Running the build"
+    },
+    {
+      content: "Fix any type errors found",
+      status: "pending",
+      activeForm: "Fixing type errors"
+    }
+  ]
+```
+
+### Example 2: Research Then Plan
+```
+User: Help me rename getCwd to getCurrentWorkingDirectory across my project
+
+# First: Search to understand scope
+[Uses grep to find all occurrences]
+
+# Found 15 instances across 8 files
+
+TodoWrite tool:
+  todos: [
+    {
+      content: "Rename getCwd in src/utils.ts",
+      status: "in_progress",
+      activeForm: "Renaming getCwd in src/utils.ts"
+    },
+    {
+      content: "Rename getCwd in src/main.ts",
+      status: "pending",
+      activeForm: "Renaming getCwd in src/main.ts"
+    },
+    # ... more files
+  ]
+```
+
+### Example 3: Multiple Features
+```
+User: I need user registration, product catalog, shopping cart, and checkout
+
+TodoWrite tool:
+  todos: [
+    {
+      content: "Implement user registration with validation",
+      status: "in_progress",
+      activeForm: "Implementing user registration"
+    },
+    {
+      content: "Create product catalog with search",
+      status: "pending",
+      activeForm: "Creating product catalog"
+    },
+    {
+      content: "Build shopping cart functionality",
+      status: "pending",
+      activeForm: "Building shopping cart"
+    },
+    {
+      content: "Implement checkout flow",
+      status: "pending",
+      activeForm: "Implementing checkout flow"
+    }
+  ]
+```
+
+### Example 4: Completing Tasks
+```
+# After finishing first task
+TodoWrite tool:
+  todos: [
+    {
+      content: "Run the build",
+      status: "completed",  # Mark completed immediately
+      activeForm: "Running the build"
+    },
+    {
+      content: "Fix type error in auth.ts line 45",
+      status: "in_progress",  # Move to next task
+      activeForm: "Fixing type error in auth.ts"
+    },
+    # ... more tasks
+  ]
+```
+
+## Task Breakdown
+- Create specific, actionable items
+- Break complex tasks into smaller, manageable steps
+- Use clear, descriptive task names
+- Always provide both forms (content and activeForm)
+
+## When in Doubt
+Use this tool. Being proactive with task management demonstrates attentiveness and ensures you complete all requirements successfully.
+
+## Related
+- task_management.txt
+- todo_list_empty.txt (system reminder)

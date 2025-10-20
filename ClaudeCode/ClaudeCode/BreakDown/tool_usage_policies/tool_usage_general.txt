@@ -1,0 +1,91 @@
+# Tool Usage General Policies
+
+## Overview
+General guidelines for using tools in Claude Code effectively and efficiently.
+
+## Core Principles
+
+### Specialized Tools Preference
+- Use specialized tools instead of bash commands when possible
+- Provides better user experience
+- More reliable and optimized for the task
+
+### File Operations Priority
+Use dedicated tools for file operations:
+- **Read** tool for reading files (NOT cat/head/tail)
+- **Edit** tool for editing files (NOT sed/awk)
+- **Write** tool for creating files (NOT echo >/cat <<EOF)
+- **Glob** tool for finding files (NOT find or ls)
+- **Grep** tool for searching code (NOT grep or rg)
+
+### Bash Tool Scope
+Reserve bash tools exclusively for:
+- Actual system commands
+- Terminal operations requiring shell execution
+- Git commands
+- Package managers (npm, pip, etc.)
+- Build tools
+- Docker, etc.
+
+### Communication
+NEVER use bash echo or command-line tools to communicate with user:
+- Output all communication directly in response text
+- Don't use code comments to communicate
+- Don't use bash commands to explain thoughts
+
+## Task Tool for Complex Searches
+
+### When to Use Task Tool
+VERY IMPORTANT: When exploring the codebase to gather context or answer non-specific questions, use the Task tool with subagent_type=Explore
+
+### Use Explore Agent For:
+- Gathering context about codebase structure
+- Understanding how a system works
+- Finding files by patterns across large codebases
+- Open-ended searches requiring multiple rounds
+- Questions about overall architecture
+
+### Don't Use Explore Agent For:
+- Reading a specific known file path (use Read)
+- Searching for a specific class definition (use Glob)
+- Searching within 2-3 specific files (use Read)
+- Needle queries for specific functions/classes
+
+## Examples
+
+### Good: Specialized Tools
+```
+# Finding files
+[Uses Glob tool with pattern "**/*.ts"]
+
+# Searching code
+[Uses Grep tool with pattern "authentication"]
+
+# Reading file
+[Uses Read tool with file path]
+```
+
+### Bad: Bash for File Operations
+```
+# Don't do this
+[Uses Bash: cat src/file.ts]
+[Uses Bash: find . -name "*.ts"]
+[Uses Bash: grep -r "pattern" .]
+```
+
+### Good: Explore Agent
+```
+User: Where are errors from the client handled?
+Assistant: [Uses Task tool with subagent_type=Explore]
+```
+
+### Good: Direct Tools
+```
+User: Read the auth.ts file
+Assistant: [Uses Read tool directly]
+```
+
+## Related
+- parallel_tool_execution.txt
+- specialized_tools_preference.txt
+- explore_agent_usage.txt

@@ -1,0 +1,53 @@
+# Parallel Tool Execution
+
+## Overview
+Guidelines for executing multiple tools efficiently through parallel vs sequential execution.
+
+## Core Principle
+You can call multiple tools in a single response. Maximize use of parallel tool calls where possible to increase efficiency.
+
+## When to Use Parallel Execution
+
+### Independent Operations
+If you intend to call multiple tools and there are no dependencies between them, make all independent tool calls in parallel.
+
+### Examples of Parallel Calls
+- Reading multiple unrelated files
+- Running multiple independent searches
+- Checking git status AND git diff AND git log
+- Launching multiple agents for different tasks
+
+## When to Use Sequential Execution
+
+### Dependent Operations
+However, if some tool calls depend on previous calls to inform dependent values, do NOT call these tools in parallel and instead call them sequentially.
+
+### Examples of Sequential Calls
+- mkdir THEN cp (directory must exist first)
+- Write file THEN git add (file must exist first)
+- git add THEN git commit (staging must happen first)
+- Read file to get content THEN Edit based on that content
+
+## Rules
+
+### Never Use Placeholders
+- Never use placeholders in tool calls
+- Never guess missing parameters
+- If you need information from a previous tool call, wait for it
+
+### Chaining with &&
+- For sequential bash commands, use `&&` to chain them
+- Example: `git add . && git commit -m "message" && git push`
+- Only use `;` when you don't care if earlier commands fail
+- Do NOT use newlines to separate commands (newlines ok in quoted strings)
+
+### User-Specified Parallel Execution
+If the user specifies that they want you to run tools "in parallel", you MUST send a single message with multiple tool use content blocks.
+
+## Examples
+
+### Good: Parallel Independent Calls
+```xml
+<function_calls>
+<invoke name="Read">
+<parameter name="file_path">/path/to/file1.ts

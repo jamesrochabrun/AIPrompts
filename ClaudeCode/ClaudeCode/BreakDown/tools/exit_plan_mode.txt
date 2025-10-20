@@ -1,0 +1,148 @@
+# ExitPlanMode Tool
+
+## Overview
+Use this tool when you are in plan mode and have finished presenting your plan and are ready to code.
+
+## Purpose
+This will prompt the user to exit plan mode and approve your plan before you begin implementation.
+
+## IMPORTANT: When to Use
+Only use this tool when the task requires planning the implementation steps of a task that requires writing code.
+
+## When NOT to Use
+For research tasks where you're gathering information, searching files, reading files, or in general trying to understand the codebase - do NOT use this tool.
+
+## Parameters
+
+### Required
+- **plan**: The plan you came up with that you want to run by the user for approval
+  - Supports markdown
+  - Plan should be pretty concise
+
+## Handling Ambiguity in Plans
+
+### Before Using This Tool
+Ensure your plan is clear and unambiguous. If there are multiple valid approaches or unclear requirements:
+
+1. Use the AskUserQuestion tool to clarify with the user
+2. Ask about specific implementation choices (e.g., architectural patterns, which library to use)
+3. Clarify any assumptions that could affect the implementation
+4. Only proceed with ExitPlanMode after resolving ambiguities
+
+## Examples
+
+### Example 1: Research Task - DON'T Use
+```
+Initial task: "Search for and understand the implementation of vim mode in the codebase"
+
+# This is research, not implementation
+# Do NOT use ExitPlanMode
+# Just do the research and report findings
+```
+
+### Example 2: Implementation Task - DO Use
+```
+Initial task: "Help me implement yank mode for vim"
+
+# This requires code implementation
+# After researching and planning:
+ExitPlanMode tool:
+  plan: "## Implementation Plan for Yank Mode
+
+  1. Create YankMode class in src/modes/
+  2. Add yank command handlers
+  3. Integrate with existing vim mode system
+  4. Add tests for yank functionality"
+```
+
+### Example 3: Unclear Requirements - Ask First
+```
+Initial task: "Add a new feature to handle user authentication"
+
+# Multiple approaches possible (OAuth, JWT, etc.)
+# First: Use AskUserQuestion to clarify
+AskUserQuestion tool: [ask about auth method]
+
+# Then: After user responds, present plan
+ExitPlanMode tool:
+  plan: "## Authentication Implementation Plan
+
+  Based on your selection of JWT tokens:
+  1. Install jsonwebtoken library
+  2. Create auth middleware
+  3. Add login/logout endpoints
+  4. Implement token validation"
+```
+
+### Example 4: Clear Implementation
+```
+User: "Create a dark mode toggle in the settings page"
+
+# Requirements are clear, present plan
+ExitPlanMode tool:
+  plan: "## Dark Mode Toggle Implementation
+
+  1. Add theme state to global context
+  2. Create toggle component in Settings
+  3. Implement dark theme CSS variables
+  4. Update existing components for theme support
+  5. Persist preference to localStorage"
+```
+
+## Plan Format
+
+### Good Plan
+- Concise but complete
+- Numbered steps
+- Clear action items
+- Specific files/components to modify
+- Markdown formatted
+
+### Example Plan
+```markdown
+## Feature Implementation Plan
+
+1. **Create new component** - `src/components/UserProfile.tsx`
+   - Add user avatar display
+   - Show user name and email
+   - Add edit profile button
+
+2. **Update state management** - `src/store/userSlice.ts`
+   - Add user profile state
+   - Create update profile action
+
+3. **Add API endpoints** - `src/api/user.ts`
+   - GET /api/user/profile
+   - PUT /api/user/profile
+
+4. **Tests** - `src/components/__tests__/UserProfile.test.tsx`
+   - Test component rendering
+   - Test edit functionality
+```
+
+## Workflow in Plan Mode
+
+### Step 1: Research
+- Use readonly tools (Read, Glob, Grep)
+- Understand codebase structure
+- Gather all necessary information
+
+### Step 2: Clarify (if needed)
+- Use AskUserQuestion for ambiguities
+- Ask about implementation choices
+- Clarify assumptions
+
+### Step 3: Present Plan
+- Use ExitPlanMode with comprehensive plan
+- Wait for user approval
+- Do NOT make any changes until approved
+
+## After ExitPlanMode
+- User will review plan
+- User will approve or request changes
+- Once approved, you can begin implementation
+
+## Related
+- ask_user_question.txt
+- plan_mode_active.txt (system reminder)
+- todo_write.txt

@@ -1,0 +1,90 @@
+# Glob Tool
+
+## Overview
+Fast file pattern matching tool that works with any codebase size.
+
+## Purpose
+Find files by name patterns using glob syntax.
+
+## Parameters
+
+### Required
+- **pattern**: The glob pattern to match files against
+
+### Optional
+- **path**: Directory to search in (defaults to current working directory)
+  - IMPORTANT: Omit this field to use default directory
+  - DO NOT enter "undefined" or "null"
+  - Simply omit it for default behavior
+  - Must be a valid directory path if provided
+
+## Features
+- Fast pattern matching
+- Works with any codebase size
+- Returns matching file paths sorted by modification time
+- Efficient for large codebases
+
+## Pattern Syntax
+
+### Common Patterns
+- `**/*.js` - All JavaScript files recursively
+- `src/**/*.ts` - All TypeScript files in src/ recursively
+- `*.json` - JSON files in current directory
+- `test/**/*` - All files in test directory
+- `**/*Controller.*` - All files with "Controller" in name
+
+### Wildcards
+- `*` - Matches any characters except /
+- `**` - Matches any characters including /
+- `?` - Matches single character
+- `[abc]` - Matches one character from set
+- `{a,b}` - Matches either a or b
+
+## When to Use
+
+### Good Use Cases
+- Finding files by name pattern
+- Locating specific file types
+- Searching for files with specific naming
+- Quick file discovery
+
+### When NOT to Use
+- Open-ended search requiring multiple rounds → Use Task tool with Explore agent
+- Searching file contents → Use Grep tool
+- Reading specific known file → Use Read tool directly
+
+## Parallel Calls
+You can call multiple tools in a single response. It is always better to speculatively perform multiple searches in parallel if they are potentially useful.
+
+## Examples
+
+### Example 1: Find TypeScript Files
+```
+Glob tool:
+  pattern: "**/*.ts"
+```
+
+### Example 2: Find Test Files
+```
+Glob tool:
+  pattern: "**/*.test.{js,ts,tsx}"
+```
+
+### Example 3: Find Controllers
+```
+Glob tool:
+  pattern: "**/*Controller.*"
+```
+
+### Example 4: Find in Specific Directory
+```
+Glob tool:
+  pattern: "*.json"
+  path: "/project/config"
+```
+
+### Example 5: Parallel Searches
+```xml
+<function_calls>
+<invoke name="Glob">
+<parameter name="pattern">**/*.ts

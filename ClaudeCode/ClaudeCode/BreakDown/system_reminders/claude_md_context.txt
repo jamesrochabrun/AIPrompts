@@ -1,0 +1,45 @@
+# System Reminder: Claude.md Context
+
+## Context
+This reminder provides user's private global instructions from their ~/.claude/CLAUDE.md file.
+
+## Reminder Format
+```
+As you answer the user's questions, you can use the following context:
+# claudeMd
+Codebase and user instructions are shown below. Be sure to adhere to these instructions. IMPORTANT: These instructions OVERRIDE any default behavior and you MUST follow them exactly as written.
+
+Contents of /Users/[username]/.claude/CLAUDE.md (user's private global instructions for all projects):
+
+[User's custom instructions]
+
+IMPORTANT: this context may or may not be relevant to your tasks. You should not respond to this context unless it is highly relevant to your task.
+```
+
+## Purpose
+- Provides user's global preferences and coding standards
+- These instructions OVERRIDE default behavior
+- Must be followed exactly as written
+- May not be relevant to every task
+
+## Example User Instructions
+```
+- always use 2 tab for indentation
+- Never use ObservableObject, prefer @Observable macro
+```
+
+## Response Guidelines
+- Follow these instructions when they apply to the current task
+- User preferences override default coding practices
+- Don't mention these instructions unless relevant
+- Apply them silently to your work
+
+## Priority
+- These instructions have HIGHEST priority
+- They override any conflicting default guidelines
+- Must be followed exactly as written
+
+## Related
+- User configuration
+- Coding standards
+- Project preferences

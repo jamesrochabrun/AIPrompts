@@ -1,0 +1,111 @@
+# Write Tool
+
+## Overview
+Writes a file to the local filesystem.
+
+## Purpose
+Create new files or overwrite existing ones.
+
+## Parameters
+
+### Required
+- **file_path**: The absolute path to the file to write (must be absolute, not relative)
+- **content**: The content to write to the file
+
+## Important Rules
+
+### Overwrites Existing Files
+This tool will overwrite the existing file if there is one at the provided path.
+
+### Must Read Existing Files First
+If this is an existing file, you MUST use the Read tool first to read the file's contents. This tool will fail if you did not read the file first.
+
+### Prefer Editing Over Creating
+ALWAYS prefer editing existing files in the codebase. NEVER write new files unless explicitly required.
+
+### Documentation Files
+NEVER proactively create documentation files (*.md) or README files. Only create documentation files if explicitly requested by the User.
+
+### Emoji Policy
+Only use emojis if the user explicitly requests it. Avoid writing emojis to files unless asked.
+
+## When to Use Write
+
+### Valid Use Cases
+- User explicitly requests a new file
+- No existing file serves the intended purpose
+- Creating new module/component is architecturally necessary
+- Task cannot be accomplished by editing existing files
+
+### Invalid Use Cases
+- File already exists → Use Edit tool
+- Similar file exists that could be edited → Use Edit tool
+- Creating documentation without user request → Don't create
+- Creating README without user request → Don't create
+
+## Workflow for Existing Files
+
+### Step 1: Check if File Exists
+Use Read tool or Glob tool to check for existing file
+
+### Step 2: If Exists, Read It
+Must use Read tool to read existing file contents first
+
+### Step 3: Decide Edit vs Write
+- If minor changes → Use Edit tool
+- If complete rewrite necessary → Can use Write tool (after reading)
+
+## Examples
+
+### Example 1: Create New File (User Requested)
+```
+User: Create a new file called config.ts for environment variables
+
+Write tool:
+  file_path: "/project/src/config.ts"
+  content: "export const config = {\n  apiUrl: process.env.API_URL,\n  apiKey: process.env.API_KEY\n};"
+```
+
+### Example 2: Wrong - Should Edit Instead
+```
+# Wrong approach
+Write tool to overwrite existing file with minor changes
+
+# Correct approach
+Edit tool to make targeted changes to existing file
+```
+
+### Example 3: Wrong - Proactive Documentation
+```
+# Wrong - don't proactively create docs
+Write tool: README.md
+
+# Correct - only if user requests
+Wait for user to ask for README
+```
+
+### Example 4: Complete Rewrite After Reading
+```
+# Step 1: Read existing file
+Read tool: /project/src/old-config.ts
+
+# Step 2: Write complete replacement
+Write tool:
+  file_path: "/project/src/old-config.ts"
+  content: "[completely new structure]"
+```
+
+## Before Using Write
+
+### Ask Yourself
+1. Does a file already exist that serves this purpose?
+2. Can I edit an existing file instead?
+3. Did the user explicitly ask for a new file?
+4. Is this truly necessary for the task?
+5. Have I read the file if it already exists?
+
+## Related
+- edit.txt
+- read.txt
+- file_creation_policy.txt
+- tone_and_style.txt

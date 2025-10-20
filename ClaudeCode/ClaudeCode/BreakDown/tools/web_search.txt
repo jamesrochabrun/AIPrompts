@@ -1,0 +1,124 @@
+# WebSearch Tool
+
+## Overview
+Allows Claude to search the web and use the results to inform responses.
+
+## Purpose
+Provides up-to-date information for current events and recent data beyond Claude's knowledge cutoff.
+
+## Parameters
+
+### Required
+- **query**: The search query to use (minimum 2 characters)
+
+### Optional
+- **allowed_domains**: Array of domains to include (only results from these domains)
+- **blocked_domains**: Array of domains to exclude (never results from these domains)
+
+## Features
+- Provides up-to-date information
+- Returns search result information formatted as search result blocks
+- Searches performed automatically within single API call
+- Domain filtering supported
+
+## Availability
+- Web search is only available in the US
+
+## Important: Date Awareness
+Account for "Today's date" in <env>.
+
+### Example
+If <env> says "Today's date: 2025-07-01", and the user wants the latest docs, do NOT use 2024 in the search query. Use 2025.
+
+## Use Cases
+
+### Current Events
+```
+WebSearch tool:
+  query: "latest TypeScript features 2025"
+```
+
+### Recent Documentation
+```
+WebSearch tool:
+  query: "React 19 migration guide"
+```
+
+### Technology Updates
+```
+WebSearch tool:
+  query: "Python 3.13 new features"
+```
+
+### Framework Comparisons
+```
+WebSearch tool:
+  query: "Next.js vs Remix 2025 comparison"
+```
+
+## Domain Filtering
+
+### Allowed Domains (Whitelist)
+```
+WebSearch tool:
+  query: "authentication best practices"
+  allowed_domains: ["developer.mozilla.org", "stackoverflow.com"]
+```
+
+### Blocked Domains (Blacklist)
+```
+WebSearch tool:
+  query: "React hooks tutorial"
+  blocked_domains: ["w3schools.com"]
+```
+
+## Examples
+
+### Example 1: Latest Features
+```
+User: What are the latest features in Node.js?
+WebSearch tool:
+  query: "Node.js latest features 2025"
+```
+
+### Example 2: Documentation Search
+```
+User: How do I use the new Swift macros?
+WebSearch tool:
+  query: "Swift macros documentation 2025"
+  allowed_domains: ["developer.apple.com", "swift.org"]
+```
+
+### Example 3: Technology Comparison
+```
+User: Should I use Vite or Webpack?
+WebSearch tool:
+  query: "Vite vs Webpack 2025 comparison benchmarks"
+```
+
+### Example 4: Package Information
+```
+User: Is there a good library for date formatting in JavaScript?
+WebSearch tool:
+  query: "best JavaScript date formatting library 2025"
+```
+
+## When to Use
+
+### Good Use Cases
+- Information beyond Claude's knowledge cutoff (after January 2025)
+- Current events and news
+- Latest library/framework versions
+- Recent documentation updates
+- Technology comparisons and benchmarks
+- Package recommendations
+
+### When NOT to Use
+- Information within Claude's knowledge
+- Well-established programming concepts
+- Questions about code in current project
+- Historical information
+
+## Related
+- web_fetch.txt
+- Environment date context

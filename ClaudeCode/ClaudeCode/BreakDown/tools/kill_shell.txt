@@ -1,0 +1,152 @@
+# KillShell Tool
+
+## Overview
+Kills a running background bash shell by its ID.
+
+## Purpose
+Terminate a long-running shell that was started with Bash tool's run_in_background parameter.
+
+## Parameters
+
+### Required
+- **shell_id**: The ID of the background shell to kill
+
+## Returns
+Success or failure status
+
+## Finding Shell IDs
+Use the `/bashes` command to list all background shells and their IDs.
+
+## Use Cases
+
+### Stop Development Server
+```
+# Started development server in background
+# bash_id: "shell_dev123"
+
+KillShell tool:
+  shell_id: "shell_dev123"
+```
+
+### Cancel Long Build
+```
+# Started build that's taking too long
+# bash_id: "shell_build456"
+
+KillShell tool:
+  shell_id: "shell_build456"
+```
+
+### Clean Up After Testing
+```
+# Test server no longer needed
+# bash_id: "shell_test789"
+
+KillShell tool:
+  shell_id: "shell_test789"
+```
+
+## Examples
+
+### Example 1: Stop Server
+```
+# Previously started: npm run dev (background)
+# Shell ID: "shell_abc123"
+
+User: Stop the development server
+
+KillShell tool:
+  shell_id: "shell_abc123"
+```
+
+### Example 2: Cancel Process
+```
+# Previously started: long-running-script.sh (background)
+# Shell ID: "shell_xyz789"
+
+User: Cancel that script, it's taking too long
+
+KillShell tool:
+  shell_id: "shell_xyz789"
+```
+
+### Example 3: Multiple Shells
+```
+# List active shells
+/bashes command shows:
+- shell_dev123 (npm run dev)
+- shell_test456 (pytest)
+- shell_build789 (npm run build)
+
+# Kill specific one
+KillShell tool:
+  shell_id: "shell_dev123"
+```
+
+## Workflow
+
+### Typical Background Process Lifecycle
+
+#### Step 1: Start Process
+```
+Bash tool:
+  command: "npm run watch"
+  run_in_background: true
+# Returns shell_id: "shell_watch123"
+```
+
+#### Step 2: Monitor (Optional)
+```
+BashOutput tool:
+  bash_id: "shell_watch123"
+```
+
+#### Step 3: Kill When Done
+```
+KillShell tool:
+  shell_id: "shell_watch123"
+```
+
+## When to Use
+
+### Good Reasons to Kill
+- User requests to stop process
+- Process no longer needed
+- Process stuck or taking too long
+- Cleaning up before starting new process
+- Error condition requires restart
+
+### When NOT to Kill
+- Process just started (give it time)
+- Process about to complete naturally
+- Uncertain if process is still needed
+
+## Finding Shell Information
+
+### Use /bashes Command
+```
+/bashes
+```
+
+Returns list of background shells with:
+- Shell ID
+- Command being run
+- Status (running/completed/failed)
+- Start time
+
+## Important Notes
+- Killing shell terminates the process immediately
+- No graceful shutdown (sends SIGKILL)
+- Output buffer is lost after kill
+- Shell ID becomes invalid after kill
+- Use BashOutput to retrieve output before killing if needed
+
+## Error Handling
+- Returns error if shell_id doesn't exist
+- Returns error if shell already terminated
+- Returns success if kill successful
+
+## Related
+- bash.txt
+- bash_output.txt
+- Background process management

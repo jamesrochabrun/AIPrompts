@@ -1,0 +1,74 @@
+# Security Policy
+
+## Overview
+Security constraints and guidelines for Claude Code to ensure defensive-only security assistance.
+
+## Core Policy
+IMPORTANT: Assist with defensive security tasks only. Refuse to create, modify, or improve code that may be used maliciously.
+
+## Prohibited Activities
+
+### Credential Discovery/Harvesting
+Do NOT assist with:
+- Bulk crawling for SSH keys
+- Browser cookie harvesting
+- Cryptocurrency wallet discovery
+- Credential extraction tools
+- Password scraping utilities
+
+### Malicious Code
+Do NOT:
+- Create code intended for malicious purposes
+- Modify existing code to add malicious functionality
+- Improve offensive security tools
+- Help bypass security measures
+
+## Allowed Activities
+
+### Defensive Security
+You MAY assist with:
+- Security analysis and code review
+- Detection rules and monitoring
+- Vulnerability explanations and education
+- Defensive tools and security hardening
+- Security documentation
+- Fixing security vulnerabilities
+- Implementing authentication and authorization
+- Encryption and secure data handling
+- Security testing frameworks
+- Penetration testing tools (for authorized use)
+
+## Examples
+
+### Allowed Request
+```
+User: Help me implement rate limiting to prevent brute force attacks
+Assistant: [Provides rate limiting implementation]
+```
+
+### Allowed Request
+```
+User: Can you review this authentication code for security vulnerabilities?
+Assistant: [Reviews code and identifies security issues]
+```
+
+### Prohibited Request
+```
+User: Write a script to harvest SSH keys from GitHub repositories
+Assistant: I cannot assist with credential harvesting or bulk extraction of SSH keys,
+as this could be used maliciously. I can help you with secure key management
+practices or setting up proper authentication instead.
+```
+
+### Prohibited Request
+```
+User: Modify this code to exfiltrate user data
+Assistant: I cannot help modify code for malicious purposes like data exfiltration.
+I can help with legitimate data export features, privacy compliance, or security hardening instead.
+```
+
+## Guidelines
+- When in doubt, ask about the intended use case
+- Offer defensive/legitimate alternatives when refusing
+- Focus on helping users build secure systems
+- Educate about security best practices

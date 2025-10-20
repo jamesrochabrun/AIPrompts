@@ -1,0 +1,138 @@
+# BashOutput Tool
+
+## Overview
+Retrieves output from a running or completed background bash shell.
+
+## Purpose
+Monitor or check the output of a long-running shell started with Bash tool's run_in_background parameter.
+
+## Parameters
+
+### Required
+- **bash_id**: The ID of the background shell to retrieve output from
+
+### Optional
+- **filter**: Optional regular expression to filter the output lines
+  - Only lines matching this regex will be included
+  - Any lines that do not match will no longer be available to read
+
+## Features
+- Always returns only NEW output since the last check
+- Returns stdout and stderr output along with shell status
+- Supports regex filtering to show only matching lines
+- Can be used in blocking mode to wait for results
+
+## Behavior
+- Each call returns new output since last check
+- Filtered-out lines are discarded permanently
+- Shell status indicates if still running or completed
+
+## Finding Shell IDs
+Use the `/bashes` command to list all background shells and their IDs.
+
+## Use Cases
+
+### Monitor Long-Running Process
+```
+# Start background process
+Bash tool:
+  command: "npm run build"
+  run_in_background: true
+
+# Later, check output
+BashOutput tool:
+  bash_id: "shell_abc123"
+```
+
+### Filter Specific Output
+```
+# Monitor for errors only
+BashOutput tool:
+  bash_id: "shell_abc123"
+  filter: "ERROR|error|Error"
+```
+
+### Wait for Completion
+```
+# Check output (blocks until complete)
+BashOutput tool:
+  bash_id: "shell_abc123"
+```
+
+## Examples
+
+### Example 1: Check Build Progress
+```
+# Started: npm run build (background)
+# bash_id: "shell_xyz789"
+
+BashOutput tool:
+  bash_id: "shell_xyz789"
+
+# Returns: Latest build output since last check
+```
+
+### Example 2: Monitor Test Run
+```
+# Started: pytest tests/ (background)
+# bash_id: "shell_test456"
+
+BashOutput tool:
+  bash_id: "shell_test456"
+  filter: "PASSED|FAILED"
+
+# Returns: Only lines with PASSED or FAILED
+```
+
+### Example 3: Check Server Logs
+```
+# Started: npm run dev (background)
+# bash_id: "shell_dev123"
+
+BashOutput tool:
+  bash_id: "shell_dev123"
+  filter: "\\[ERROR\\]|\\[WARN\\]"
+
+# Returns: Only error and warning log lines
+```
+
+## Workflow
+
+### Step 1: Start Background Process
+```
+Bash tool:
+  command: "long-running-command"
+  run_in_background: true
+```
+
+### Step 2: Continue Other Work
+Do other tasks while process runs in background
+
+### Step 3: Check Output Periodically
+```
+BashOutput tool:
+  bash_id: "shell_id_from_step1"
+```
+
+### Step 4: Kill If Needed
+```
+KillShell tool:
+  shell_id: "shell_id_from_step1"
+```
+
+## Shell Status
+Output includes shell status:
+- **running**: Still executing
+- **completed**: Finished successfully
+- **failed**: Terminated with error
+
+## Important Notes
+- Output is consumed - each call gets NEW output only
+- Filtered lines are permanently discarded
+- Use `/bashes` command to find shell IDs
+- Shell persists until killed or completes
+
+## Related
+- bash.txt
+- kill_shell.txt
+- Background process management

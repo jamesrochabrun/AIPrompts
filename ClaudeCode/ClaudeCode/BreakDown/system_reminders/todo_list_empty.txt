@@ -1,0 +1,30 @@
+# System Reminder: Todo List Empty
+
+## Context
+This reminder appears when the todo list is currently empty.
+
+## Reminder Text
+```
+This is a reminder that your todo list is currently empty. DO NOT mention this to the user explicitly because they are already aware. If you are working on tasks that would benefit from a todo list please use the TodoWrite tool to create one. If not, please feel free to ignore. Again do not mention this message to the user.
+```
+
+## Purpose
+- Prompts assistant to consider using TodoWrite for complex tasks
+- Reminds that user is already aware of empty state
+- Should NOT be mentioned explicitly to the user
+
+## When It Appears
+- At the start of a conversation
+- After all todos have been completed and list cleared
+- When no active tasks are being tracked
+
+## Response Guidelines
+- Do NOT say "I see your todo list is empty"
+- Do NOT explicitly mention this reminder to the user
+- Evaluate if the current task would benefit from TodoWrite
+- If yes, create a todo list
+- If no, proceed without mentioning it
+
+## Related
+- task_management.txt
+- TodoWrite tool

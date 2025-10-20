@@ -1,0 +1,133 @@
+# Specialized Tools Preference
+
+## Overview
+Guidelines emphasizing the use of specialized tools over bash commands for better user experience.
+
+## Core Principle
+Use specialized tools instead of bash commands when possible, as this provides a better user experience.
+
+## File Operations
+
+### DO Use Specialized Tools
+
+#### Reading Files
+- **Read tool** instead of cat/head/tail
+- Optimized for file reading with line numbers
+- Supports images, PDFs, and Jupyter notebooks
+- Better error handling
+
+#### Editing Files
+- **Edit tool** instead of sed/awk
+- Exact string replacement
+- Validation and error checking
+- Preserves formatting
+
+#### Writing Files
+- **Write tool** instead of cat with heredoc or echo redirection
+- Cleaner syntax
+- Better validation
+- Proper file creation workflow
+
+#### Finding Files
+- **Glob tool** instead of find or ls
+- Fast pattern matching
+- Works with any codebase size
+- Sorted by modification time
+
+#### Searching Code
+- **Grep tool** instead of grep or rg commands
+- ALWAYS use Grep tool for searches
+- Optimized for correct permissions
+- Multiple output modes
+- Better formatting
+
+## DO NOT Use Bash For
+
+### File Reading
+```
+# Bad
+bash: cat src/file.ts
+bash: head -n 20 src/file.ts
+
+# Good
+Read tool: /path/to/src/file.ts
+```
+
+### File Editing
+```
+# Bad
+bash: sed -i 's/old/new/g' file.ts
+
+# Good
+Edit tool with old_string and new_string
+```
+
+### File Writing
+```
+# Bad
+bash: echo "content" > file.ts
+bash: cat <<EOF > file.ts
+
+# Good
+Write tool with file_path and content
+```
+
+### File Finding
+```
+# Bad
+bash: find . -name "*.ts"
+bash: ls -la src/
+
+# Good
+Glob tool with pattern "**/*.ts"
+```
+
+### Code Searching
+```
+# Bad
+bash: grep -r "pattern" .
+bash: rg "pattern"
+
+# Good
+Grep tool with pattern parameter
+```
+
+## DO Use Bash For
+
+### System Commands
+- git operations
+- npm/pip/package managers
+- Docker commands
+- Build tools
+- Terminal operations requiring shell
+
+### Examples of Appropriate Bash Usage
+```
+bash: git status
+bash: npm install
+bash: docker build -t myapp .
+bash: pytest tests/
+```
+
+## Benefits of Specialized Tools
+
+### Better User Experience
+- Clearer intent
+- Better error messages
+- Optimized performance
+- Consistent formatting
+
+### Better Integration
+- Results formatted for Claude
+- Proper error handling
+- Built-in validation
+- Context awareness
+
+### Better Reliability
+- Correct permissions
+- Proper path handling
+- Cross-platform compatibility
+
+## Related
+- tool_usage_general.txt
+- Individual tool documentation in tools/

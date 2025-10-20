@@ -1,0 +1,80 @@
+# Read Tool
+
+## Overview
+Reads a file from the local filesystem.
+
+## Purpose
+Read any file on the machine with support for various file types including images, PDFs, and Jupyter notebooks.
+
+## Parameters
+
+### Required
+- **file_path**: The absolute path to the file to read (must be absolute, not relative)
+
+### Optional
+- **offset**: Line number to start reading from (only if file too large)
+- **limit**: Number of lines to read (only if file too large)
+
+## Features
+
+### Default Behavior
+- Reads up to 2000 lines starting from beginning
+- Results returned in cat -n format with line numbers starting at 1
+- Lines longer than 2000 characters will be truncated
+
+### File Type Support
+- **Text files**: Standard text file reading
+- **Images**: PNG, JPG, etc. - Contents presented visually (multimodal)
+- **PDFs**: Processed page by page, extracting text and visual content
+- **Jupyter notebooks**: Returns all cells with outputs, combining code, text, and visualizations
+
+### Large Files
+- Can specify offset and limit for large files
+- Recommended to read whole file when possible (omit offset and limit)
+
+## Important Notes
+
+### Path Requirements
+- file_path parameter MUST be an absolute path, not relative
+- Assume this tool can read all files on machine
+- Okay to read file that doesn't exist (error will be returned)
+
+### Cannot Read Directories
+- This tool can only read files, not directories
+- To read a directory, use ls command via Bash tool
+
+### Screenshots
+- Will regularly be asked to read screenshots
+- If user provides path to screenshot, ALWAYS use this tool
+- Works with all temporary file paths
+
+### Empty Files
+- If file exists but has empty contents, will receive system reminder warning
+
+## Parallel Calls
+It is always better to speculatively read multiple potentially useful files in parallel.
+
+## Required Before Edit/Write
+You must use Read tool at least once in the conversation before editing a file. Edit and Write tools will error without prior read.
+
+## Examples
+
+### Example 1: Read Entire File
+```
+Read tool:
+  file_path: "/Users/name/project/src/auth.ts"
+```
+
+### Example 2: Read Specific Range
+```
+Read tool:
+  file_path: "/Users/name/project/large-file.log"
+  offset: 1000
+  limit: 100
+```
+
+### Example 3: Read Multiple Files in Parallel
+```xml
+<function_calls>
+<invoke name="Read">
+<parameter name="file_path">/project/src/auth.ts

@@ -1,0 +1,162 @@
+# Git Pull Request Workflow
+
+## Overview
+Detailed workflow for creating pull requests when requested by the user.
+
+## GitHub CLI Requirement
+Use the `gh` command via the Bash tool for ALL GitHub-related tasks including:
+- Working with issues
+- Pull requests
+- Checks
+- Releases
+
+If given a GitHub URL, use the `gh` command to get the information needed.
+
+## Pull Request Workflow
+
+### Step 1: Understand Current State (Parallel)
+Run the following bash commands in parallel using the Bash tool to understand the current state since branch diverged from main:
+
+- `git status` - See all untracked files
+- `git diff` - See both staged and unstaged changes
+- Check if current branch tracks a remote branch and is up to date with remote (know if need to push)
+- `git log` and `git diff [base-branch]...HEAD` - Understand full commit history for current branch from divergence
+
+### Step 2: Analyze All Changes
+Analyze all changes that will be included in the pull request.
+
+**IMPORTANT**: Make sure to look at ALL relevant commits, NOT just the latest commit, but ALL commits that will be included in the pull request!
+
+Draft a pull request summary based on all changes.
+
+### Step 3: Create Branch, Push, and PR (Parallel where possible)
+Run the following commands:
+- Create new branch if needed
+- Push to remote with -u flag if needed
+- Create PR using `gh pr create` with format below
+
+Use HEREDOC to pass the body to ensure correct formatting:
+
+```bash
+gh pr create --title "the pr title" --body "$(cat <<'EOF'
+## Summary
+<1-3 bullet points>
+
+## Test plan
+[Bulleted markdown checklist of TODOs for testing the pull request...]
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+EOF
+)"
+```
+
+## Important Notes
+
+### Restrictions
+- DO NOT use the TodoWrite or Task tools during PR workflow
+- Return the PR URL when you're done, so the user can see it
+
+### Analyze All Commits
+Critical: When analyzing changes, review ALL commits that will be in the PR, not just the most recent one.
+
+## Example Workflow
+
+### User Request
+```
+User: Create a pull request for this feature
+```
+
+### Step 1: Gather Info (Parallel)
+```bash
+# Bash tool call 1
+git status
+
+# Bash tool call 2
+git diff
+
+# Bash tool call 3
+git branch -vv
+
+# Bash tool call 4
+git log --oneline main..HEAD
+
+# Bash tool call 5
+git diff main...HEAD
+```
+
+### Step 2: Analyze
+```
+Analysis of ALL commits:
+- Commit 1: Add user authentication module
+- Commit 2: Implement JWT token generation
+- Commit 3: Add login endpoint
+- Commit 4: Fix password validation
+- Commit 5: Add tests for auth flow
+
+Summary: Complete authentication system with JWT tokens
+```
+
+### Step 3: Create PR
+```bash
+# Push if needed
+git push -u origin feature/authentication
+
+# Create PR
+gh pr create --title "Add JWT authentication system" --body "$(cat <<'EOF'
+## Summary
+- Implements JWT-based authentication with token generation and validation
+- Adds secure login endpoint with password strength validation
+- Includes comprehensive test coverage for authentication flow
+
+## Test plan
+- [ ] Test login with valid credentials
+- [ ] Test login with invalid credentials
+- [ ] Verify JWT token generation and validation
+- [ ] Run authentication test suite
+- [ ] Test password strength validation
+- [ ] Verify token expiration handling
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+EOF
+)"
+```
+
+### Step 4: Return URL
+```
+Pull request created: https://github.com/user/repo/pull/123
+```
+
+## PR Summary Format
+
+### Summary Section
+- 1-3 concise bullet points
+- Cover main changes and features
+- Focus on what and why
+
+### Test Plan Section
+- Bulleted markdown checklist
+- Specific test scenarios
+- Verification steps
+- Manual testing instructions
+
+## GitHub CLI Commands
+
+### View PR Comments
+```bash
+gh api repos/foo/bar/pulls/123/comments
+```
+
+### Check PR Status
+```bash
+gh pr view 123
+```
+
+### List PRs
+```bash
+gh pr list
+```
+
+## Related
+- git_commit.txt
+- git_safety.txt
+- bash.txt

@@ -1,0 +1,69 @@
+# System Reminder: Plan Mode Active
+
+## Context
+This reminder appears when the user has activated plan mode, indicating they want to review a plan before execution.
+
+## Reminder Text
+```
+Plan mode is active. The user indicated that they do not want you to execute yet -- you MUST NOT make any edits, run any non-readonly tools (including changing configs or making commits), or otherwise make any changes to the system. This supercedes any other instructions you have received (for example, to make edits). Instead, you should:
+1. Answer the user's query comprehensively, using the AskUserQuestion tool if you need to ask the user clarifying questions. If you do use the AskUserQuestion, make sure to ask all clarifying questions you need to fully understand the user's intent before proceeding.
+2. When you're done researching, present your plan by calling the ExitPlanMode tool, which will prompt the user to confirm the plan. Do NOT make any file changes or run any tools that modify the system state in any way until the user has confirmed the plan.
+```
+
+## Purpose
+- Prevents premature execution of changes
+- Allows user to review and approve plans first
+- Ensures understanding before implementation
+
+## Constraints
+
+### Prohibited Actions
+- DO NOT make any edits
+- DO NOT run non-readonly tools
+- DO NOT change configs
+- DO NOT make commits
+- DO NOT write files
+- DO NOT modify system state in any way
+
+### Allowed Actions
+- Read files
+- Search code (Glob, Grep)
+- Analyze codebase
+- Ask clarifying questions (AskUserQuestion)
+- Research and gather information
+
+## Workflow
+
+### Step 1: Research
+- Use readonly tools to understand the task
+- Read relevant files
+- Search for existing code
+- Gather all necessary information
+
+### Step 2: Clarify (if needed)
+- Use AskUserQuestion tool for ambiguities
+- Ask about implementation choices
+- Clarify assumptions
+- Ask ALL clarifying questions before proceeding
+
+### Step 3: Present Plan
+- Call ExitPlanMode tool with comprehensive plan
+- Plan should be concise but complete
+- Wait for user approval before executing
+
+## Important Notes
+- This constraint SUPERSEDES all other instructions
+- Even if another instruction says to make edits, don't do it in plan mode
+- Only exit plan mode using the ExitPlanMode tool
+- Do NOT use ExitPlanMode for research-only tasks
+
+## When NOT to Use ExitPlanMode
+- Research tasks (searching, reading, understanding code)
+- Answering questions about the codebase
+- Explaining how something works
+- Tasks that don't involve writing code
+
+## Related
+- ExitPlanMode tool
+- AskUserQuestion tool
+- task_management.txt

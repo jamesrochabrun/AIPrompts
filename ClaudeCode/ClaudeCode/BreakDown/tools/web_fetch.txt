@@ -1,0 +1,106 @@
+# WebFetch Tool
+
+## Overview
+Fetches content from a specified URL and processes it using an AI model.
+
+## Purpose
+Retrieve and analyze web content, particularly for accessing documentation and online resources.
+
+## Parameters
+
+### Required
+- **url**: The URL to fetch content from (must be fully-formed valid URL)
+- **prompt**: The prompt to run on the fetched content (describe what information to extract)
+
+## Process
+1. Fetches the URL content
+2. Converts HTML to markdown
+3. Processes content with prompt using small, fast model
+4. Returns model's response about the content
+
+## Features
+- Automatic HTTP to HTTPS upgrade
+- Self-cleaning 15-minute cache for faster repeated access
+- Read-only (does not modify any files)
+- Results may be summarized if content is very large
+
+## Redirects
+
+### Redirect Handling
+When a URL redirects to a different host, the tool will inform you and provide the redirect URL in a special format.
+
+### Response to Redirects
+You should then make a new WebFetch request with the redirect URL to fetch the content.
+
+## MCP Tools Preference
+IMPORTANT: If an MCP-provided web fetch tool is available, prefer using that tool instead of this one, as it may have fewer restrictions. All MCP-provided tools start with "mcp__".
+
+## Use Cases
+
+### Documentation Access
+```
+WebFetch tool:
+  url: "https://docs.claude.com/en/docs/claude-code/features"
+  prompt: "Explain the main features of Claude Code and how to use them"
+```
+
+### API Reference
+```
+WebFetch tool:
+  url: "https://api.example.com/docs"
+  prompt: "What are the available endpoints for user authentication?"
+```
+
+### Library Documentation
+```
+WebFetch tool:
+  url: "https://react.dev/reference/react/useState"
+  prompt: "Explain how useState works and provide examples"
+```
+
+### Claude Code Documentation
+When user asks about Claude Code directly (e.g., "can Claude Code do...", "does Claude Code have...", "how do I..."), use WebFetch to gather information from Claude Code docs.
+
+```
+WebFetch tool:
+  url: "https://docs.claude.com/en/docs/claude-code/claude_code_docs_map.md"
+  prompt: "Find documentation about [user's question]"
+```
+
+## Examples
+
+### Example 1: Fetch Documentation
+```
+User: What are the latest features in React 19?
+WebFetch tool:
+  url: "https://react.dev/blog/2024/12/05/react-19"
+  prompt: "Summarize the new features introduced in React 19"
+```
+
+### Example 2: Handle Redirect
+```
+WebFetch tool returns: "Redirect to https://new-url.com"
+
+# Make new request with redirect URL
+WebFetch tool:
+  url: "https://new-url.com"
+  prompt: "Extract the information about..."
+```
+
+### Example 3: Claude Code Help
+```
+User: Can Claude Code work with Jupyter notebooks?
+WebFetch tool:
+  url: "https://docs.claude.com/en/docs/claude-code/claude_code_docs_map.md"
+  prompt: "Find information about Jupyter notebook support in Claude Code"
+```
+
+## Limitations
+- Read-only operation
+- May summarize very large content
+- Subject to URL access restrictions
+- 15-minute cache (same URL within 15 min uses cache)
+
+## Related
+- web_search.txt
+- MCP tools (if available)

@@ -1,0 +1,121 @@
+# Skill Tool
+
+## Overview
+Execute a skill within the main conversation.
+
+## Purpose
+Invoke specialized skills that provide specific capabilities and domain knowledge.
+
+## Parameters
+
+### Required
+- **command**: The skill name only, no arguments (e.g., "pdf" or "xlsx")
+
+## How Skills Work
+
+### Invocation
+- When you invoke a skill, you will see: `<command-message>The "{name}" skill is loading</command-message>`
+- The skill's prompt will expand and provide detailed instructions on how to complete the task
+
+### Fully Qualified Names
+You can also use fully qualified names:
+- `command: "ms-office-suite:pdf"` - invoke using package:skill format
+
+## Important Rules
+
+### Only Use Listed Skills
+- Only use skills listed in `<available_skills>` section
+- Do not invoke a skill that is already running
+- Do not use this tool for built-in CLI commands (like /help, /clear, etc.)
+
+### Check Available Skills
+Before using this tool, check what skills are available in the `<available_skills>` section provided in the system context.
+
+## Examples
+
+### Example 1: PDF Skill
+```
+Skill tool:
+  command: "pdf"
+
+# System responds with: <command-message>The "pdf" skill is loading</command-message>
+# Skill prompt expands with PDF-specific instructions
+```
+
+### Example 2: Excel Skill
+```
+Skill tool:
+  command: "xlsx"
+
+# System responds with: <command-message>The "xlsx" skill is loading</command-message>
+# Skill prompt expands with Excel-specific instructions
+```
+
+### Example 3: Fully Qualified
+```
+Skill tool:
+  command: "ms-office-suite:pdf"
+```
+
+## Workflow
+
+### Step 1: Check Available Skills
+Look at `<available_skills>` section in system context
+
+### Step 2: Identify Appropriate Skill
+Determine which skill matches the user's request
+
+### Step 3: Invoke Skill
+Use Skill tool with skill name
+
+### Step 4: Follow Expanded Prompt
+After skill loads, follow the detailed instructions provided by the skill's expanded prompt
+
+## When to Use
+
+### Use Skills When:
+- User's request matches a specialized skill capability
+- Skill provides domain expertise for the task
+- Skill listed in available_skills
+
+### Don't Use When:
+- No appropriate skill available
+- Skill already running
+- Request is for built-in CLI command
+- Task can be completed with standard tools
+
+## Skills vs Slash Commands
+
+### Skills
+- Invoked with Skill tool
+- Provide specialized capabilities
+- Expand with detailed prompts
+- Domain-specific expertise
+
+### Slash Commands
+- Invoked with SlashCommand tool
+- Custom user-defined commands
+- Project-specific workflows
+- See slash_command.txt
+
+## Available Skills
+The available skills are listed in `<available_skills>` section of the system prompt. This list may be empty if no skills are installed.
+
+### Example Available Skills Section
+```xml
+<available_skills>
+pdf - Work with PDF documents
+xlsx - Work with Excel spreadsheets
+image-editor - Edit and manipulate images
+</available_skills>
+```
+
+## Important Notes
+- Skills are stateful - don't invoke if already running
+- Each skill provides its own detailed instructions
+- Skills are different from slash commands
+- Not all environments have skills available
+
+## Related
+- slash_command.txt
+- task.txt

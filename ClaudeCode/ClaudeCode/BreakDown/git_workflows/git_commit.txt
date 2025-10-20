@@ -1,0 +1,149 @@
+# Git Commit Workflow
+
+## Overview
+Detailed workflow for creating git commits when requested by the user.
+
+## When to Create Commits
+Only create commits when requested by the user. If unclear, ask first.
+
+## IMPORTANT: Never Commit Unless Asked
+NEVER commit changes unless the user explicitly asks you to. It is VERY IMPORTANT to only commit when explicitly asked, otherwise the user will feel that you are being too proactive.
+
+## Git Safety Protocol
+
+### Prohibited Actions
+- NEVER update the git config
+- NEVER run destructive/irreversible git commands unless user explicitly requests
+  - push --force
+  - hard reset
+  - etc.
+- NEVER skip hooks (--no-verify, --no-gpg-sign, etc.) unless user explicitly requests
+- NEVER run force push to main/master (warn the user if they request it)
+- NEVER use git -i flag (like git rebase -i or git add -i) - requires interactive input
+
+### Amend Restrictions
+Avoid `git commit --amend`. ONLY use --amend when either:
+1. User explicitly requested amend, OR
+2. Adding edits from pre-commit hook (see Step 4 below)
+
+Before amending, ALWAYS check authorship: `git log -1 --format='%an %ae'`
+
+## Commit Workflow
+
+### Step 1: Gather Information (Parallel)
+Run the following bash commands in parallel, each using the Bash tool:
+- `git status` - See all untracked files
+- `git diff` - See both staged and unstaged changes
+- `git log` - See recent commit messages to follow repository's commit message style
+
+### Step 2: Analyze and Draft Commit Message
+- Summarize nature of changes (new feature, enhancement, bug fix, refactoring, test, docs, etc.)
+- Ensure message accurately reflects changes and their purpose:
+  - "add" = wholly new feature
+  - "update" = enhancement to existing feature
+  - "fix" = bug fix
+  - etc.
+- Do NOT commit files that likely contain secrets (.env, credentials.json, etc.)
+  - Warn user if they specifically request to commit those files
+- Draft concise (1-2 sentences) commit message focusing on "why" rather than "what"
+
+### Step 3: Add Files and Create Commit
+Run the following commands:
+- Add relevant untracked files to staging area
+- Create commit with message ending with:
+  ```
+  🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+  Co-Authored-By: Claude <noreply@anthropic.com>
+  ```
+- Run `git status` after commit completes to verify success
+
+Note: git status depends on commit completing, so run it sequentially after the commit.
+
+### Step 4: Handle Pre-commit Hook Changes
+If commit fails due to pre-commit hook changes, retry ONCE.
+
+If it succeeds but files were modified by the hook, verify it's safe to amend:
+- Check authorship: `git log -1 --format='%an %ae'`
+- Check not pushed: `git status` shows "Your branch is ahead"
+- If both true: amend your commit
+- Otherwise: create NEW commit (never amend other developers' commits)
+
+## Commit Message Format
+
+### Use HEREDOC for Formatting
+ALWAYS pass commit message via HEREDOC for proper formatting:
+
+```bash
+git commit -m "$(cat <<'EOF'
+Commit message here.
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+Co-Authored-By: Claude <noreply@anthropic.com>
+EOF
+)"
+```
+
+## Important Notes
+
+### Restrictions
+- NEVER run additional commands to read or explore code, besides git bash commands
+- NEVER use the TodoWrite or Task tools during commit workflow
+- DO NOT push to remote repository unless user explicitly asks
+- IMPORTANT: Never use git -i flag (requires interactive input)
+
+### Empty Commits
+If there are no changes to commit (no untracked files and no modifications), do not create an empty commit.
+
+## Example Workflow
+
+### User Request
+```
+User: Please commit these changes
+```
+
+### Step 1: Gather Info (Parallel)
+```bash
+# Bash tool call 1
+git status
+
+# Bash tool call 2
+git diff
+
+# Bash tool call 3
+git log --oneline -5
+```
+
+### Step 2: Analyze
+```
+Analysis:
+- Added new authentication module
+- Updated login endpoint
+- Fixed password validation bug
+- 3 new files, 2 modified files
+- Following conventional commits style from git log
+```
+
+### Step 3: Commit
+```bash
+git add src/auth/ src/api/login.ts src/utils/validation.ts
+
+git commit -m "$(cat <<'EOF'
+Add authentication module with password validation fix
+
+Implements JWT-based authentication and fixes validation bug in password strength checker.
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+Co-Authored-By: Claude <noreply@anthropic.com>
+EOF
+)"
+
+git status
+```
+
+## Related
+- git_safety.txt
+- git_pr.txt
+- bash.txt

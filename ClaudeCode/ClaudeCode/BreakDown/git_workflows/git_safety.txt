@@ -1,0 +1,173 @@
+# Git Safety Protocol
+
+## Overview
+Safety rules and restrictions for git operations to prevent destructive actions.
+
+## Core Safety Principles
+These rules apply to all git operations in Claude Code.
+
+## Prohibited Actions
+
+### Configuration
+- NEVER update the git config
+- Don't modify user.name, user.email, or any other git configuration
+
+### Destructive Commands
+NEVER run destructive/irreversible git commands unless the user explicitly requests them:
+- `git push --force` or `git push -f`
+- `git reset --hard`
+- `git clean -fd`
+- `git rebase` (without user request)
+- `git filter-branch`
+- Other commands that rewrite history or permanently delete data
+
+### Hook Skipping
+NEVER skip hooks unless the user explicitly requests it:
+- `--no-verify`
+- `--no-gpg-sign`
+- `-n` (no-verify shorthand)
+
+### Force Push to Protected Branches
+NEVER run force push to main/master. Warn the user if they request it.
+
+```
+User: Force push to main
+Assistant: Warning: Force pushing to main/master is dangerous and can cause data loss for other developers. Are you sure you want to do this? Consider pushing to a feature branch instead.
+```
+
+### Interactive Commands
+NEVER use git commands with the -i flag (requires interactive input which is not supported):
+- `git rebase -i`
+- `git add -i`
+- `git commit -i`
+
+## Amend Restrictions
+
+### When to Avoid Amend
+Avoid `git commit --amend` in general.
+
+### When Amend is Allowed
+ONLY use `--amend` when either:
+1. User explicitly requested amend, OR
+2. Adding edits from pre-commit hook
+
+### Before Amending: Safety Checks
+ALWAYS check before amending:
+```bash
+# Check authorship
+git log -1 --format='%an %ae'
+
+# Check if pushed
+git status  # Should show "Your branch is ahead"
+```
+
+If commit is from another developer or already pushed, create NEW commit instead.
+
+## Commit Restrictions
+
+### Only Commit When Asked
+NEVER commit changes unless the user explicitly asks you to.
+
+**This is VERY IMPORTANT**: Only commit when explicitly asked, otherwise the user will feel that you are being too proactive.
+
+### No Empty Commits
+If there are no changes to commit (no untracked files and no modifications), do not create an empty commit.
+
+### Secret Files
+Do not commit files that likely contain secrets:
+- `.env`
+- `.env.local`
+- `credentials.json`
+- `secrets.yaml`
+- `*.pem`
+- `*.key`
+- etc.
+
+Warn the user if they specifically request to commit those files.
+
+## Push Restrictions
+
+### Don't Push Unless Asked
+DO NOT push to the remote repository unless the user explicitly asks you to do so.
+
+### Force Push Warning
+If user requests force push to main/master, warn them about the dangers:
+```
+Warning: Force pushing to main/master can:
+- Overwrite other developers' work
+- Cause data loss
+- Break CI/CD pipelines
+- Create synchronization issues
+
+Consider:
+- Pushing to a feature branch instead
+- Creating a new commit instead of amending
+- Coordinating with your team first
+```
+
+## Safe Git Operations
+
+### Always Safe
+These operations are safe and don't require special caution:
+- `git status`
+- `git log`
+- `git diff`
+- `git branch` (list branches)
+- `git show`
+- `git fetch`
+- `git pull` (in most cases)
+
+### Safe with User Request
+These are safe when user explicitly requests:
+- `git add`
+- `git commit` (non-amend)
+- `git push` (non-force)
+- `git branch` (create/delete)
+- `git checkout`
+- `git merge`
+
+### Requires Extra Caution
+These require explicit user request AND confirmation:
+- `git push --force`
+- `git reset --hard`
+- `git commit --amend`
+- `git rebase`
+- `git clean`
+
+## Examples
+
+### Good: Safe Operations
+```bash
+git status
+git log --oneline -10
+git diff HEAD~1
+git branch -a
+```
+
+### Good: User Requested
+```
+User: Please commit these changes
+[Proceed with commit workflow]
+```
+
+### Bad: Destructive Without Request
+```bash
+git reset --hard HEAD~1  # Never do this without explicit request
+git push --force         # Never do this without explicit request
+```
+
+### Good: Warning User
+```
+User: Amend the last commit and force push
+Assistant: I can do that, but I want to make sure you understand:
+- Amending changes the commit hash
+- Force pushing will overwrite the remote
+- This can cause problems for other developers
+
+Are you sure you want to proceed?
+```
+
+## Related
+- git_commit.txt
+- git_pr.txt
+- bash.txt

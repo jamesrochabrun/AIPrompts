@@ -1,0 +1,167 @@
+# SlashCommand Tool
+
+## Overview
+Execute a slash command within the main conversation.
+
+## Purpose
+Route user intentions to specialized workflows defined in `.claude/commands/` directory.
+
+## IMPORTANT: Intent Matching
+Before starting any task, CHECK if the user's request matches one of the slash commands listed in Available Commands. This tool exists to route user intentions to specialized workflows.
+
+## How Slash Commands Work
+
+### Invocation
+When you use this tool or when a user types a slash command:
+1. You will see: `<command-message>{name} is running…</command-message>`
+2. Followed by the expanded prompt
+
+### Example
+If `.claude/commands/foo.md` contains "Print today's date", then `/foo` expands to that prompt in the next message.
+
+## Parameters
+
+### Required
+- **command**: The slash command to execute, including any arguments
+  - Example: `command: "/review-pr 123"`
+
+## Important Rules
+
+### Only Use for Custom Commands
+IMPORTANT: Only use this tool for custom slash commands that appear in the Available Commands list below.
+
+### Do NOT Use For:
+- Built-in CLI commands (like /help, /clear, etc.)
+- Commands not shown in the list
+- Commands you think might exist but aren't listed
+
+### Multiple Commands
+When a user requests multiple slash commands:
+- Execute each one sequentially
+- Check for `<command-message>{name} is running…</command-message>` to verify each has been processed
+
+### Don't Invoke Running Commands
+Do not invoke a command that is already running. For example:
+- If you see `<command-message>foo is running…</command-message>`
+- Do NOT use this tool with "/foo"
+- Process the expanded prompt in the following message instead
+
+## Command Discovery
+
+### Available Commands
+Only custom slash commands with descriptions are listed in Available Commands. If a user's command is not listed, ask them to:
+- Check the slash command file
+- Consult the docs
+
+### Where Commands Are Defined
+- Custom commands are stored in `.claude/commands/` directory
+- Each command is a markdown file
+- File name determines command name (e.g., `foo.md` → `/foo`)
+
+## Examples
+
+### Example 1: Review Pull Request
+```
+User: Review PR 123
+
+# Check Available Commands, find /review-pr
+SlashCommand tool:
+  command: "/review-pr 123"
+
+# System responds: <command-message>review-pr is running…</command-message>
+# Expanded prompt provides PR review instructions
+```
+
+### Example 2: Run Tests
+```
+User: Run the test suite
+
+# Check Available Commands, find /test
+SlashCommand tool:
+  command: "/test"
+
+# System responds: <command-message>test is running…</command-message>
+# Expanded prompt provides test execution instructions
+```
+
+### Example 3: Multiple Commands
+```
+User: Run /build and then /deploy
+
+# Execute first command
+SlashCommand tool:
+  command: "/build"
+# Wait for: <command-message>build is running…</command-message>
+
+# Then execute second command
+SlashCommand tool:
+  command: "/deploy"
+# Wait for: <command-message>deploy is running…</command-message>
+```
+
+### Example 4: With Arguments
+```
+User: Create a new component called UserProfile
+
+# Check Available Commands, find /create-component
+SlashCommand tool:
+  command: "/create-component UserProfile"
+```
+
+## Available Commands List
+
+The Available Commands section in the system prompt lists all custom slash commands. This may look like:
+
+```
+Available Commands:
+- /review-pr [number] - Review a GitHub pull request
+- /test - Run the test suite
+- /build - Build the project
+- /create-component [name] - Create a new component
+```
+
+## Command Not Listed?
+
+If user requests a command that's not in Available Commands:
+1. Inform user the command is not found
+2. Ask them to check the slash command file in `.claude/commands/`
+3. Suggest consulting Claude Code documentation
+
+## Workflow
+
+### Step 1: Match Intent
+Check if user's request matches an Available Command
+
+### Step 2: Invoke Command
+Use SlashCommand tool with command and arguments
+
+### Step 3: Wait for Expansion
+Look for `<command-message>{name} is running…</command-message>`
+
+### Step 4: Follow Expanded Prompt
+Process the detailed instructions from the expanded command prompt
+
+## Creating Custom Commands
+
+Users can create custom slash commands by:
+1. Creating markdown file in `.claude/commands/`
+2. File name becomes command name
+3. File contents become the expanded prompt
+4. Add description for it to appear in Available Commands
+
+### Example Command File
+`.claude/commands/review.md`:
+```markdown
+Review the current file for:
+- Code quality
+- Best practices
+- Potential bugs
+- Performance issues
+```
+
+Invoked as: `/review`
+
+## Related
+- skill.txt
+- task.txt
+- Custom command documentation

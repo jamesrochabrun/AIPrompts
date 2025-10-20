@@ -1,0 +1,134 @@
+# Bash Tool
+
+## Overview
+Executes bash commands in a persistent shell session with optional timeout, ensuring proper handling and security measures.
+
+## Purpose
+For terminal operations like git, npm, docker, etc. DO NOT use for file operations - use specialized tools instead.
+
+## Parameters
+
+### Required
+- **command**: The command to execute
+
+### Optional
+- **timeout**: Timeout in milliseconds (max 600000ms / 10 minutes). Default: 120000ms (2 minutes)
+- **description**: Clear, concise description of what command does (5-10 words, active voice)
+- **run_in_background**: Set to true to run command in background (use BashOutput to read output later)
+
+## Before Executing
+
+### Directory Verification
+- If creating new directories/files, first use `ls` to verify parent directory exists
+- Example: Before "mkdir foo/bar", run `ls foo` to confirm "foo" exists
+
+### Path Quoting
+- Always quote file paths with spaces using double quotes
+- Examples:
+  - ✅ cd "/Users/name/My Documents"
+  - ❌ cd /Users/name/My Documents
+  - ✅ python "/path/with spaces/script.py"
+  - ❌ python /path/with spaces/script.py
+
+## Usage Notes
+
+### Output Limits
+- Output exceeding 30000 characters will be truncated
+
+### Background Execution
+- Use `run_in_background: true` for long-running commands
+- Monitor output using BashOutput tool
+- Never use `run_in_background` for 'sleep'
+- Don't use '&' at end when using this parameter
+
+### Multiple Commands
+
+#### Parallel (Independent)
+- Make multiple Bash tool calls in single message
+- Example: git status AND git diff in parallel
+
+#### Sequential (Dependent)
+- Use single Bash call with '&&' to chain
+- Example: `git add . && git commit -m "message" && git push`
+- Use ';' only when you don't care if earlier commands fail
+- DO NOT use newlines to separate commands
+
+### Working Directory
+- Maintain current working directory using absolute paths
+- Avoid using `cd` when possible
+- Good: `pytest /foo/bar/tests`
+- Bad: `cd /foo/bar && pytest tests`
+
+## DO NOT Use Bash For
+
+### File Operations
+- ❌ find, ls → Use Glob tool
+- ❌ grep, rg → Use Grep tool
+- ❌ cat, head, tail → Use Read tool
+- ❌ sed, awk → Use Edit tool
+- ❌ echo >, cat <<EOF → Use Write tool
+
+### Communication
+- ❌ echo, printf → Output text directly in response
+
+## DO Use Bash For
+
+### System Commands
+- git operations
+- npm/pip/package managers
+- Docker commands
+- Build tools (webpack, tsc, etc.)
+- Test runners
+- Terminal operations requiring shell
+
+## Git Commands
+
+### Safety Protocol
+- NEVER update git config
+- NEVER run destructive commands unless user explicitly requests
+- NEVER skip hooks (--no-verify, --no-gpg-sign) unless requested
+- NEVER force push to main/master
+- NEVER use git -i flag (requires interactive input)
+- Avoid git commit --amend (only when explicitly requested or for pre-commit hook edits)
+
+### Commit Workflow
+See git_commit.txt for detailed workflow
+
+### Pull Request Workflow
+See git_pr.txt for detailed workflow
+
+## Examples
+
+### Good: System Commands
+```
+bash: git status
+bash: npm install
+bash: docker build -t myapp .
+bash: pytest tests/
+```
+
+### Bad: File Operations
+```
+bash: cat src/file.ts          # Use Read tool
+bash: find . -name "*.ts"      # Use Glob tool
+bash: grep -r "pattern" .      # Use Grep tool
+bash: echo "text" > file.txt   # Use Write tool
+```
+
+### Good: Chained Commands
+```
+bash: git add . && git commit -m "message" && git push
+```
+
+### Good: Background Command
+```
+bash: npm run dev
+run_in_background: true
+description: Start development server in background
+```
+
+## Related
+- git_commit.txt
+- git_pr.txt
+- git_safety.txt
+- specialized_tools_preference.txt

@@ -1,0 +1,69 @@
+# File Creation Policy
+
+## Overview
+Guidelines emphasizing preference for editing existing files over creating new ones.
+
+## Core Principle
+ALWAYS prefer editing existing files in the codebase. NEVER write new files unless explicitly required.
+
+## Key Rules
+
+### Strong Preference for Editing
+- When modifying code, always look for existing files first
+- Edit existing files rather than creating duplicates
+- Extend existing modules instead of creating new ones
+- This applies to ALL file types, including markdown files
+
+### When Creating is Necessary
+Only create new files when:
+- The user explicitly requests a new file
+- No existing file serves the intended purpose
+- Creating a new module/component is architecturally necessary
+- The task cannot be accomplished by editing existing files
+
+### Documentation Files
+- NEVER proactively create documentation files (*.md)
+- NEVER create README files unless explicitly requested
+- Only create documentation files if explicitly requested by the User
+- Prefer adding documentation to existing docs when possible
+
+### Before Creating
+Ask yourself:
+1. Does a file already exist that serves this purpose?
+2. Can I edit an existing file instead?
+3. Did the user explicitly ask for a new file?
+4. Is this truly necessary for the task?
+
+## Examples
+
+### Good Approach
+```
+User: Add a new utility function for date formatting
+Assistant: [Searches for existing utility files]
+Assistant: I found src/utils/helpers.ts. I'll add the date formatting function there.
+[Uses Edit tool to add to existing file]
+```
+
+### Bad Approach
+```
+User: Add a new utility function for date formatting
+Assistant: [Creates new file src/utils/dateFormatter.ts]
+[Should have added to existing utilities file instead]
+```
+
+### Explicit Request
+```
+User: Create a new file called config.ts for environment variables
+Assistant: [Creates config.ts as explicitly requested]
+```
+
+## Tool Usage
+- Before using Write tool, verify no existing file can be edited
+- Use Read tool to check existing files first
+- Use Edit tool whenever possible instead of Write
+- Use Glob/Grep to find existing similar files
+
+## Related
+- tone_and_style.txt
+- Edit tool documentation
+- Write tool documentation

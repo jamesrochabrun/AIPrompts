@@ -1,0 +1,114 @@
+# Task Tool
+
+## Overview
+Launch a new agent to handle complex, multi-step tasks autonomously.
+
+## Purpose
+Delegates specialized tasks to sub-agents that can work independently with specific tool access.
+
+## Available Agent Types
+
+### general-purpose
+- **Tools**: All tools (*)
+- **Use for**: Researching complex questions, searching for code, executing multi-step tasks
+- **When**: Searching for keyword/file and not confident you'll find the right match in first few tries
+
+### statusline-setup
+- **Tools**: Read, Edit
+- **Use for**: Configure the user's Claude Code status line setting
+
+### output-style-setup
+- **Tools**: Read, Write, Edit, Glob, Grep
+- **Use for**: Create a Claude Code output style
+
+### Explore
+- **Tools**: Glob, Grep, Read, Bash
+- **Use for**: Fast codebase exploration
+- **When**: Quickly find files by patterns, search code for keywords, answer questions about codebase
+- **Thoroughness levels**: "quick", "medium", "very thorough"
+
+### isabela
+- **Tools**: All tools (*)
+- **Use for**: When user says "isabela publish npm"
+
+### openai (architecture-reviewer)
+- **Tools**: All tools (*)
+- **Use for**: Evaluate implementations, plans, or code changes for architectural soundness
+- **When**: After code is written, when reviewing design decisions, evaluating proposed changes
+
+## Parameters
+
+### Required
+- **subagent_type**: The type of specialized agent to use
+- **description**: Short (3-5 word) description of the task
+- **prompt**: Detailed task for the agent to perform autonomously
+
+## When NOT to Use
+
+### Use Direct Tools Instead
+- Reading a specific known file path → Use Read tool
+- Searching for specific class definition → Use Glob tool
+- Searching within 2-3 specific files → Use Read tool
+- Other tasks not related to agent descriptions
+
+## Usage Notes
+
+### Parallelization
+- Launch multiple agents concurrently when possible
+- Use single message with multiple tool uses
+- Maximizes performance
+
+### Communication
+- Agent returns single message when done
+- Result not visible to user
+- You must send text message to user with summary
+- Each invocation is stateless
+- No follow-up communication possible
+
+### Prompt Guidelines
+- Provide highly detailed task description
+- Specify exactly what information to return
+- Clearly state if expecting code writing or just research
+- Agent is not aware of user's intent
+
+### Proactive Use
+- If agent description mentions proactive use, use it without user asking
+- Use your judgment
+
+### Parallel Agent Execution
+- If user specifies "in parallel", send single message with multiple Task tool calls
+
+## Examples
+
+### Example 1: Explore Agent
+```
+User: Where are errors from the client handled?
+Assistant: [Uses Task tool with:
+  subagent_type="Explore"
+  description="Find error handling"
+  prompt="Find where client errors are handled in the codebase. Use thorough exploration."
+]
+```
+
+### Example 2: General Purpose for Search
+```
+Assistant: [Uses Task tool with:
+  subagent_type="general-purpose"
+  description="Search for authentication"
+  prompt="Search the codebase for all authentication-related code. I need to find where user login is implemented but I'm not sure of the exact file names or structure."
+]
+```
+
+### Example 3: Architecture Review
+```
+User: I've implemented a new caching layer
+Assistant: [Uses Task tool with:
+  subagent_type="openai"
+  description="Review caching implementation"
+  prompt="Review the newly implemented caching layer for architectural soundness and suggest improvements."
+]
+```
+
+## Related
+- explore_agent_usage.txt
+- tool_usage_general.txt

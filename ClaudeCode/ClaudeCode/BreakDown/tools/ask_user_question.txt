@@ -1,0 +1,190 @@
+# AskUserQuestion Tool
+
+## Overview
+Use this tool when you need to ask the user questions during execution.
+
+## Purpose
+- Gather user preferences or requirements
+- Clarify ambiguous instructions
+- Get decisions on implementation choices as you work
+- Offer choices to the user about what direction to take
+
+## Parameters
+
+### Required
+- **questions**: Array of question objects (1-4 questions)
+
+### Question Object Structure
+Each question must have:
+- **question**: Complete question ending with ? (clear and specific)
+- **header**: Very short label (max 12 chars) - Examples: "Auth method", "Library", "Approach"
+- **options**: Array of option objects (2-4 options)
+- **multiSelect**: Boolean - true to allow multiple selections, false for single selection
+
+### Option Object Structure
+Each option must have:
+- **label**: Display text user sees (1-5 words, concise)
+- **description**: Explanation of what this option means or what will happen
+
+## Features
+- Users can always select "Other" to provide custom text input (automatically provided)
+- Set multiSelect: true to allow multiple answers for a question
+- Support for 1-4 questions in single call
+- Each question can have 2-4 options
+
+## Question Phrasing
+
+### Single Select (multiSelect: false)
+- "Which library should we use for date formatting?"
+- "What platform do you want to build this for?"
+- "Which approach would you prefer?"
+
+### Multi Select (multiSelect: true)
+- "Which features do you want to enable?"
+- "Which tests should we run?"
+- "Which components need updating?"
+
+## Use Cases
+
+### Gather Preferences
+```
+AskUserQuestion tool:
+  questions: [
+    {
+      question: "Which styling approach do you prefer?",
+      header: "Styling",
+      multiSelect: false,
+      options: [
+        {
+          label: "CSS Modules",
+          description: "Scoped CSS with .module.css files"
+        },
+        {
+          label: "Tailwind CSS",
+          description: "Utility-first CSS framework"
+        },
+        {
+          label: "Styled Components",
+          description: "CSS-in-JS with tagged templates"
+        }
+      ]
+    }
+  ]
+```
+
+### Clarify Ambiguity
+```
+AskUserQuestion tool:
+  questions: [
+    {
+      question: "Which authentication method should we implement?",
+      header: "Auth method",
+      multiSelect: false,
+      options: [
+        {
+          label: "JWT tokens",
+          description: "Stateless authentication with JSON Web Tokens"
+        },
+        {
+          label: "Session cookies",
+          description: "Server-side sessions with cookie storage"
+        },
+        {
+          label: "OAuth 2.0",
+          description: "Third-party authentication (Google, GitHub, etc.)"
+        }
+      ]
+    }
+  ]
+```
+
+### Multiple Selections
+```
+AskUserQuestion tool:
+  questions: [
+    {
+      question: "Which features are most important to you?",
+      header: "Features",
+      multiSelect: true,
+      options: [
+        {
+          label: "Dark mode",
+          description: "Support for light and dark themes"
+        },
+        {
+          label: "Offline mode",
+          description: "Work without internet connection"
+        },
+        {
+          label: "Real-time sync",
+          description: "Automatic syncing across devices"
+        },
+        {
+          label: "Export data",
+          description: "Export to CSV, JSON, or PDF"
+        }
+      ]
+    }
+  ]
+```
+
+### Multiple Questions
+```
+AskUserQuestion tool:
+  questions: [
+    {
+      question: "What platform do you want to build this for?",
+      header: "Platform",
+      multiSelect: false,
+      options: [
+        {label: "iOS", description: "Native iOS app with SwiftUI"},
+        {label: "Android", description: "Native Android app with Kotlin"},
+        {label: "Web", description: "Web application with React"}
+      ]
+    },
+    {
+      question: "What level of complexity are you aiming for?",
+      header: "Complexity",
+      multiSelect: false,
+      options: [
+        {label: "Simple", description: "Basic features only"},
+        {label: "Moderate", description: "Standard feature set"},
+        {label: "Advanced", description: "Full-featured with extras"}
+      ]
+    }
+  ]
+```
+
+## Response Format
+After user answers, you receive:
+```
+User has answered your questions: "Question 1"="Answer 1", "Question 2"="Answer 2, Answer 3"
+```
+
+For multiSelect questions, multiple answers are comma-separated.
+
+## Plan Mode Usage
+In plan mode, use AskUserQuestion to clarify ambiguities before calling ExitPlanMode.
+
+### Example
+```
+# User request is ambiguous about which approach to use
+
+# First: Ask for clarification
+AskUserQuestion tool: [ask about approach options]
+
+# Then: After receiving answer, exit plan mode
+ExitPlanMode tool: [present plan based on user's choice]
+```
+
+## Best Practices
+- Keep questions clear and specific
+- Provide meaningful option descriptions
+- Don't create "Other" option (automatically provided)
+- Use multiSelect when choices aren't mutually exclusive
+- Limit to most important questions (1-4)
+- Header should be very short (max 12 chars)
+
+## Related
+- exit_plan_mode.txt
+- plan_mode_active.txt (system reminder)

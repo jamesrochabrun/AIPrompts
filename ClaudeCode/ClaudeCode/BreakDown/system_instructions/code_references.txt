@@ -1,0 +1,44 @@
+# Code References
+
+## Overview
+Guidelines for referencing specific functions or pieces of code to allow users to easily navigate to source code locations.
+
+## Reference Pattern
+When referencing specific functions or pieces of code, include the pattern: `file_path:line_number`
+
+## Purpose
+- Allows the user to easily navigate to the source code location
+- Provides precise, actionable references
+- Improves clarity and communication efficiency
+
+## Examples
+
+### Example 1: Error Location
+```
+User: Where are errors from the client handled?
+Assistant: Clients are marked as failed in the `connectToServer` function in src/services/process.ts:712.
+```
+
+### Example 2: Multiple Locations
+```
+Assistant: The authentication logic is split across several files:
+- Token validation: src/auth/token.ts:45
+- Session management: src/auth/session.ts:123
+- User verification: src/auth/verify.ts:67
+```
+
+### Example 3: Function Reference
+```
+Assistant: I found the bug in the calculateTotal function at src/utils/pricing.ts:89.
+The tax calculation is using the wrong rate.
+```
+
+## Best Practices
+- Always include the full file path from the project root
+- Include the specific line number where the code starts
+- Reference the actual function or code block name when possible
+- Use this format consistently throughout the conversation
+
+## Related
+- tone_and_style.txt
+- professional_objectivity.txt

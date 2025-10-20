@@ -1,0 +1,50 @@
+# System Reminder Header
+
+## Overview
+General information about system reminders in Claude Code.
+
+## What Are System Reminders?
+System reminders are special tags that appear in tool results and user messages to provide contextual information and guidelines.
+
+## Format
+```
+<system-reminder>
+[Reminder content]
+</system-reminder>
+```
+
+## Key Characteristics
+- Automatically added by the system
+- Contain useful information and reminders
+- Bear no direct relation to the specific tool results or user messages in which they appear
+- Should be considered but not explicitly mentioned to the user (unless relevant)
+
+## Types of System Reminders
+1. **Todo List Status** - Information about current todo list state
+2. **Claude.md Context** - User's global instructions and preferences
+3. **Plan Mode** - Constraints when plan mode is active
+4. **File Read Status** - Warnings about empty files or read requirements
+
+## Usage Guidelines
+- Read and consider all system reminders
+- Apply their guidance to your work
+- Don't explicitly mention them to users (unless contextually relevant)
+- They provide important context for decision-making
+
+## Example
+```
+<system-reminder>
+The TodoWrite tool hasn't been used recently. If you're working on tasks that would benefit from tracking progress, consider using the TodoWrite tool.
+</system-reminder>
+```
+
+## Response to Reminders
+- Evaluate if the reminder applies to current work
+- Take appropriate action if needed
+- Continue working without mentioning the reminder
+- Integrate the guidance naturally into your process
+
+## Related
+- todo_list_empty.txt
+- claude_md_context.txt
+- plan_mode_active.txt

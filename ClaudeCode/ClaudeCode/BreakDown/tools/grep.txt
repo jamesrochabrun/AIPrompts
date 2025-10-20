@@ -1,0 +1,138 @@
+# Grep Tool
+
+## Overview
+A powerful search tool built on ripgrep for searching code contents.
+
+## Purpose
+Search for patterns in file contents across the codebase.
+
+## Important
+ALWAYS use Grep for search tasks. NEVER invoke `grep` or `rg` as a Bash command. The Grep tool has been optimized for correct permissions and access.
+
+## Parameters
+
+### Required
+- **pattern**: The regular expression pattern to search for in file contents
+
+### Optional
+- **path**: File or directory to search in (defaults to current working directory)
+- **glob**: Glob pattern to filter files (e.g. "*.js", "*.{ts,tsx}")
+- **type**: File type to search (e.g. "js", "py", "rust", "go", "java") - more efficient than glob
+- **output_mode**: "content" | "files_with_matches" | "count" (default: "files_with_matches")
+- **-B**: Number of lines to show before each match (requires output_mode: "content")
+- **-A**: Number of lines to show after each match (requires output_mode: "content")
+- **-C**: Number of lines to show before and after each match (requires output_mode: "content")
+- **-n**: Show line numbers in output (requires output_mode: "content")
+- **-i**: Case insensitive search
+- **head_limit**: Limit output to first N lines/entries
+- **multiline**: Enable multiline mode where . matches newlines (default: false)
+
+## Pattern Syntax
+
+### Regex Support
+- Full regex syntax supported
+- Examples: "log.*Error", "function\\s+\\w+"
+- Uses ripgrep (not grep) syntax
+- Literal braces need escaping: `interface\\{\\}` to find `interface{}` in Go
+
+### Multiline Matching
+- By default patterns match within single lines only
+- For cross-line patterns like `struct \\{[\\s\\S]*?field`, use `multiline: true`
+
+## Output Modes
+
+### files_with_matches (default)
+- Shows only file paths containing matches
+- Supports head_limit
+- Good for finding which files contain pattern
+
+### content
+- Shows matching lines with content
+- Supports -A, -B, -C context lines
+- Supports -n for line numbers
+- Supports head_limit
+- Good for seeing actual matches
+
+### count
+- Shows match counts per file
+- Supports head_limit
+- Good for statistics
+
+## When to Use
+
+### Good Use Cases
+- Searching for code patterns
+- Finding function/variable usage
+- Locating specific strings in code
+- Code archaeology
+
+### When NOT to Use
+- Open-ended searches requiring multiple rounds → Use Task tool with Explore agent
+- Finding files by name → Use Glob tool
+- Reading specific files → Use Read tool
+
+## Examples
+
+### Example 1: Find Files with Pattern
+```
+Grep tool:
+  pattern: "authentication"
+  output_mode: "files_with_matches"
+```
+
+### Example 2: Show Matching Lines
+```
+Grep tool:
+  pattern: "function\\s+login"
+  output_mode: "content"
+  -n: true
+  -C: 3
+```
+
+### Example 3: Search Specific File Type
+```
+Grep tool:
+  pattern: "useState"
+  type: "tsx"
+  output_mode: "content"
+```
+
+### Example 4: Case Insensitive
+```
+Grep tool:
+  pattern: "error"
+  -i: true
+  output_mode: "files_with_matches"
+```
+
+### Example 5: With Glob Filter
+```
+Grep tool:
+  pattern: "interface"
+  glob: "*.ts"
+  output_mode: "content"
+```
+
+### Example 6: Multiline Pattern
+```
+Grep tool:
+  pattern: "struct \\{[\\s\\S]*?field"
+  multiline: true
+  output_mode: "content"
+```
+
+### Example 7: Limited Results
+```
+Grep tool:
+  pattern: "TODO"
+  output_mode: "content"
+  head_limit: 10
+```
+
+## Parallel Calls
+It is always better to speculatively perform multiple searches in parallel if they are potentially useful.
+
+## Related
+- glob.txt
+- explore_agent_usage.txt
+- specialized_tools_preference.txt

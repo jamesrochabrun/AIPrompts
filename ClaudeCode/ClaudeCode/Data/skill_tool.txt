@@ -1,0 +1,18 @@
+{
+  "name": "Skill",
+  "description": "Execute a skill within the main conversation\n\n<skills_instructions>\nWhen users ask you to perform tasks, check if any of the available skills below can help complete the task more effectively. Skills provide specialized capabilities and domain knowledge.\n\nHow to use skills:\n- Invoke skills using this tool with the skill name only (no arguments)\n- When you invoke a skill, you will see <command-message>The \"{name}\" skill is loading</command-message>\n- The skill's prompt will expand and provide detailed instructions on how to complete the task\n- Examples:\n  - `command: \"pdf\"` - invoke the pdf skill\n  - `command: \"xlsx\"` - invoke the xlsx skill\n  - `command: \"ms-office-suite:pdf\"` - invoke using fully qualified name\n\nImportant:\n- Only use skills listed in <available_skills> below\n- Do not invoke a skill that is already running\n- Do not use this tool for built-in CLI commands (like /help, /clear, etc.)\n</skills_instructions>\n\n<available_skills>\n\n</available_skills>\n",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "command": {
+        "type": "string",
+        "description": "The skill name (no arguments). E.g., \"pdf\" or \"xlsx\""
+      }
+    },
+    "required": [
+      "command"
+    ],
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+  }
+}

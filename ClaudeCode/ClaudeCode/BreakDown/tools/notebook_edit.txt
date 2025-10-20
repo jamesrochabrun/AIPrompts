@@ -1,0 +1,115 @@
+# NotebookEdit Tool
+
+## Overview
+Completely replaces the contents of a specific cell in a Jupyter notebook (.ipynb file) with new source.
+
+## Purpose
+Edit Jupyter notebook cells, which are interactive documents that combine code, text, and visualizations, commonly used for data analysis and scientific computing.
+
+## Parameters
+
+### Required
+- **notebook_path**: The absolute path to the Jupyter notebook file (must be absolute, not relative)
+- **new_source**: The new source for the cell
+
+### Optional
+- **cell_id**: The ID of the cell to edit
+  - When inserting: new cell inserted after this ID, or at beginning if not specified
+- **cell_type**: "code" | "markdown"
+  - Defaults to current cell type
+  - Required if using edit_mode=insert
+- **edit_mode**: "replace" | "insert" | "delete"
+  - Defaults to "replace"
+
+## Edit Modes
+
+### replace (default)
+- Replaces content of existing cell
+- Requires cell_id
+- Optionally specify cell_type to change type
+
+### insert
+- Adds new cell
+- Inserted after cell with cell_id (or at beginning if not specified)
+- Requires cell_type
+- Provide new_source for the new cell
+
+### delete
+- Deletes the cell with cell_id
+- new_source still required (can be empty string)
+
+## Cell Indexing
+- Cells are 0-indexed
+- Use cell_id to identify specific cells
+
+## Examples
+
+### Example 1: Replace Code Cell
+```
+NotebookEdit tool:
+  notebook_path: "/project/analysis.ipynb"
+  cell_id: "abc123"
+  new_source: "import pandas as pd\ndf = pd.read_csv('data.csv')\ndf.head()"
+  cell_type: "code"
+  edit_mode: "replace"
+```
+
+### Example 2: Replace Markdown Cell
+```
+NotebookEdit tool:
+  notebook_path: "/project/analysis.ipynb"
+  cell_id: "def456"
+  new_source: "# Analysis Results\n\nThis section shows the results of our analysis."
+  cell_type: "markdown"
+  edit_mode: "replace"
+```
+
+### Example 3: Insert New Code Cell
+```
+NotebookEdit tool:
+  notebook_path: "/project/analysis.ipynb"
+  cell_id: "abc123"
+  new_source: "# New analysis code\nresult = df.groupby('category').sum()"
+  cell_type: "code"
+  edit_mode: "insert"
+```
+
+### Example 4: Insert at Beginning
+```
+NotebookEdit tool:
+  notebook_path: "/project/analysis.ipynb"
+  new_source: "import numpy as np"
+  cell_type: "code"
+  edit_mode: "insert"
+```
+
+### Example 5: Delete Cell
+```
+NotebookEdit tool:
+  notebook_path: "/project/analysis.ipynb"
+  cell_id: "old789"
+  new_source: ""
+  edit_mode: "delete"
+```
+
+## Workflow
+
+### Step 1: Read Notebook
+Use Read tool to view current notebook structure and cells
+
+### Step 2: Identify Cell
+Note the cell_id of the cell you want to edit
+
+### Step 3: Edit Cell
+Use NotebookEdit with appropriate parameters
+
+## Notes
+- Jupyter notebooks are JSON files with special structure
+- Each cell has unique ID
+- Can contain code cells (executable) and markdown cells (documentation)
+- Cells can have outputs (results of code execution)
+
+## Related
+- read.txt
+- edit.txt
+- write.txt

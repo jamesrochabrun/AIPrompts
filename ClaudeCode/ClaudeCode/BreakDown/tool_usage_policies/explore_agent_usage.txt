@@ -1,0 +1,141 @@
+# Explore Agent Usage
+
+## Overview
+Guidelines for when to use the Task tool with subagent_type=Explore for codebase exploration.
+
+## Core Principle
+VERY IMPORTANT: When exploring the codebase to gather context or to answer a question that is not a needle query for a specific file/class/function, it is CRITICAL that you use the Task tool with subagent_type=Explore instead of running search commands directly.
+
+## When to Use Explore Agent
+
+### Use Explore Agent For:
+1. **Gathering context about codebase structure**
+   - "What is the codebase structure?"
+   - "How is this project organized?"
+   - "Where are the main components?"
+
+2. **Understanding how systems work**
+   - "Where are errors from the client handled?"
+   - "How does authentication work?"
+   - "How do API endpoints work?"
+
+3. **Open-ended exploration**
+   - Requires multiple rounds of searching
+   - Not confident you'll find the match in first few tries
+   - Need to understand relationships between components
+
+4. **Complex questions about the codebase**
+   - "Where is the logging configured?"
+   - "How is state management handled?"
+   - "What's the data flow for user registration?"
+
+## When NOT to Use Explore Agent
+
+### Use Direct Tools Instead For:
+1. **Specific file path known**
+   - Use Read tool
+   - Example: "Read src/auth/login.ts"
+
+2. **Specific class definition search**
+   - Use Glob tool
+   - Example: Looking for "class UserController"
+
+3. **Search within 2-3 specific files**
+   - Use Read tool
+   - Review the files directly
+
+4. **Needle queries**
+   - Looking for specific function name
+   - Looking for specific variable
+   - Use Grep or Glob
+
+## Thoroughness Levels
+
+When calling the Explore agent, specify the desired thoroughness level:
+
+### "quick"
+- Basic searches
+- First-pass exploration
+- Simple queries
+
+### "medium"
+- Moderate exploration
+- Standard thoroughness
+- Balanced approach
+
+### "very thorough"
+- Comprehensive analysis
+- Multiple locations and naming conventions
+- Deep exploration
+
+## Examples
+
+### Good: Use Explore Agent
+```
+User: Where are errors from the client handled?
+Assistant: [Uses Task tool with subagent_type=Explore and prompt="Find where client errors are handled in the codebase"]
+```
+
+### Good: Use Explore Agent
+```
+User: What is the codebase structure?
+Assistant: [Uses Task tool with subagent_type=Explore and prompt="Analyze and describe the codebase structure"]
+```
+
+### Good: Use Explore Agent
+```
+User: How does the authentication system work?
+Assistant: [Uses Task tool with subagent_type=Explore and prompt="Explore and explain how authentication works, including all related components"]
+```
+
+### Bad: Don't Use Explore for Specific Files
+```
+User: Read the auth.ts file
+Assistant: [Should use Read tool directly, not Explore agent]
+```
+
+### Bad: Don't Use Explore for Specific Classes
+```
+User: Find the UserController class
+Assistant: [Should use Glob tool with pattern "**/UserController.*"]
+```
+
+## Benefits of Using Explore Agent
+
+### Reduces Context Usage
+- Explore agent handles multiple rounds of searching
+- Doesn't load unnecessary context into main conversation
+- More efficient for complex searches
+
+### Better Results
+- Specialized for exploration tasks
+- Can perform multiple rounds autonomously
+- Better at connecting related components
+
+### Cleaner Conversation
+- Keeps main conversation focused
+- Doesn't clutter with search commands
+- Returns comprehensive summary
+
+## Agent Invocation
+
+### Task Tool Parameters
+```
+subagent_type: "Explore"
+description: "Short description of exploration task"
+prompt: "Detailed explanation of what to find and explore"
+```
+
+### Example
+```
+Task tool:
+  subagent_type: "Explore"
+  description: "Find error handling"
+  prompt: "Search the codebase thoroughly to find where client errors are handled. Look for error handlers, try-catch blocks, and error middleware. Provide file paths and line numbers for all error handling code."
+```
+
+## Related
+- task_tool.txt
+- tool_usage_general.txt
+- grep.txt
+- glob.txt

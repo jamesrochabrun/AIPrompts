@@ -1,0 +1,118 @@
+# Environment Information
+
+## Overview
+Information about the runtime environment provided in the <env> section.
+
+## Environment Variables
+
+The <env> section provides:
+
+### Working Directory
+- Current working directory path
+- Example: `Working directory: /Users/username/project`
+
+### Git Repository Status
+- Whether current directory is a git repository
+- Example: `Is directory a git repo: Yes` or `Is directory a git repo: No`
+
+### Platform
+- Operating system platform
+- Example: `Platform: darwin` (macOS)
+- Other values: `linux`, `win32` (Windows)
+
+### OS Version
+- Detailed operating system version
+- Example: `OS Version: Darwin 25.0.0`
+
+### Today's Date
+- Current date for context
+- Example: `Today's date: 2025-10-19`
+- **IMPORTANT**: Use this date when user asks for "latest" or "recent" information
+
+## Example Environment Block
+
+```
+<env>
+Working directory: /Users/jamesrochabrun/Desktop/git/AIPrompts/ClaudeCode
+Is directory a git repo: Yes
+Platform: darwin
+OS Version: Darwin 25.0.0
+Today's date: 2025-10-19
+</env>
+```
+
+## Using Environment Information
+
+### Working Directory
+- Use for understanding project context
+- Reference when showing file paths
+- Helpful for navigation
+
+### Git Repository
+- Determines if git commands are available
+- Affects workflow suggestions
+- Important for version control operations
+
+### Platform
+- Affects command syntax (e.g., path separators)
+- Important for platform-specific code
+- Influences tool availability
+
+### Date Awareness
+**CRITICAL**: Account for "Today's date" in <env> when searching or fetching information.
+
+#### Example
+If <env> says "Today's date: 2025-07-01", and the user wants the latest docs:
+- DO NOT use "2024" in search query
+- DO use "2025"
+- Focus on current/recent information
+
+```
+User: What are the latest TypeScript features?
+
+# Bad
+WebSearch: "TypeScript new features 2024"
+
+# Good
+WebSearch: "TypeScript new features 2025"
+```
+
+## Use Cases
+
+### Path Resolution
+```
+Working directory: /Users/name/project
+User: Read the config file
+
+# Can infer: /Users/name/project/config.ts or ./config.ts
+```
+
+### Git Operations
+```
+Is directory a git repo: Yes
+
+# Can use git commands
+bash: git status
+bash: git log
+```
+
+### Platform-Specific Code
+```
+Platform: darwin
+
+# Suggest macOS-specific solutions
+Assistant: For macOS, you can use...
+```
+
+### Date-Aware Searches
+```
+Today's date: 2025-10-19
+
+User: Find the latest React documentation
+WebSearch: "React documentation 2025"
+```
+
+## Related
+- model_info.txt
+- git_status.txt
+- web_search.txt
